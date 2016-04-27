@@ -10,7 +10,7 @@ public class NVertex {
 	private int Vheight;
 	private List ConnectedVertex = new LinkedList();
 	
-	public void create(int id, String contents, int x, int y, int width, int height) {
+	public void init(int id, String contents, int x, int y, int width, int height) {
 		this.Vid = id;
 		this.Vcontents = contents;
 		this.Vx = x;
