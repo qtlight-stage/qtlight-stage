@@ -8,7 +8,7 @@ public class NVertex {
 	private int Vy;
 	private int Vwidth;
 	private int Vheight;
-	private List ConnectedVertex = new LinkedList();
+	private List ConnectedVertex = new LinkedList(); //연결된 vertex의 id저장
 	
 	public void init(int id, String contents, int x, int y, int width, int height) {
 		this.Vid = id;
@@ -19,12 +19,12 @@ public class NVertex {
 		this.Vheight = height;
 	}
 	
-	public void makeConnection(NVertex v) {
+	public void makeConnection(int v) {
 		//not implemented
 		//this.ConnectedVertex.add(v)???
 	}
 	
-	public void removeConnection(NVertex v) {
+	public void removeConnection(int v) {
 		//not implemented
 		//this.ConnectedVertex.???(v)???
 	}
@@ -70,4 +70,6 @@ public class NVertex {
 	public int height() {
 		return this.Vheight;
 	}
+	
+	
 }
