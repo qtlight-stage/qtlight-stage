@@ -15,6 +15,13 @@ public class NData {
 		this.id ++;
 	}
 	
+	public void createVertex(String contents, int x, int y, int width, int height){
+		NVertex new_vertex = new NVertex();
+		new_vertex.init(id, contents, x, y, width, height);
+		this.vertexList.add(new_vertex);
+		this.id ++;
+	}
+	
 	public NVertex getVertex(int vid){
 		//있으면 오케이
 		//없으면 에러 error catch는 윗 클래스에서 처리
