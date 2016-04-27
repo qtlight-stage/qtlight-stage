@@ -4,9 +4,9 @@ import java.util.LinkedList;
 public class NData {
 	private List vertexList = new LinkedList();
 	private List edgeList = new LinkedList();
-    private int id = 0;
-    private int defaultWidth = 1;
-    private int defaultHeight = 1;
+    	private int id = 0;
+    	private int defaultWidth = 1;
+    	private int defaultHeight = 1;
     
 	public void createVertex(String contents, int x, int y){
 		NVertex new_vertex = new NVertex();
