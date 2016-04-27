@@ -1,8 +1,8 @@
 public class NEdge {
-	private NVertex Nstart;
-	private NVertex Nend;
+	private int Nstart;
+	private int Nend;
 	
-	public void init(NVertex start, NVertex end){
+	public void init(int start, int end){
 		this.Nstart = start;
 		this.Nend = end;
 	}
