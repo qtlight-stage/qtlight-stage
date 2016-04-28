@@ -12,3 +12,13 @@ public class frameName extends JFrame {
       getContentPane().add(NewNode);
 }
 //JTextPane이 id도 저장할수있게 child class 정의 해야함
+//이때 예시
+public class frameName2 extends JFrame {
+    public void makeNewNode(int Vid, String Vcontents, int Vx, int Vy, int Vwidth, int Vheight){
+      NNode newNode = new JTextPane();
+      newNode.setId(Vid);
+      newNode.setText(Vcontents);
+      newNode.setBounds(Vx, Vy, Vwidth, Vheight);
+      getContentPane().add(NewNode);
+}
+//NNode extends JTextPane
