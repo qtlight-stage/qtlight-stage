@@ -2,11 +2,11 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class NData {
-	private List vertexList = new LinkedList();
-	private List edgeList = new LinkedList();
-    	private int id = 0;
-    	private int defaultWidth = 1;
-    	private int defaultHeight = 1;
+	private List<NVertex> vertexList = new LinkedList<NVertex>();
+	private List<NEdge> edgeList = new LinkedList<NEdge>();
+    private int id = 0;
+    private int defaultWidth = 1;
+    private int defaultHeight = 1;
     
 	public void createVertex(String contents, int x, int y){
 		NVertex new_vertex = new NVertex();
@@ -23,16 +23,16 @@ public class NData {
 	}
 	
 	public NVertex getVertex(int vid){
-		//ìˆìœ¼ë©´ ì˜¤ì¼€ì´
-		//ì—†ìœ¼ë©´ ì—ëŸ¬ error catchëŠ” ìœ— í´ë˜ìŠ¤ì—ì„œ ì²˜ë¦¬
-		return //vertexListì—ì„œ vidì¸ê²ƒ ì°¾ì•„ì£¼ê¸°
+		//ÀÖÀ¸¸é ¿ÀÄÉÀÌ
+		//¾øÀ¸¸é ¿¡·¯ error catch´Â À­ Å¬·¡½º¿¡¼­ Ã³¸®
+		return //vertexList¿¡¼­ vidÀÎ°Í Ã£¾ÆÁÖ±â
 	}
 	
-	public List getVertexList(){
+	public List<NVertex> getVertexList(){
 		return this.vertexList;
 	}
 	
-	public List getEdgeList(){
+	public List<NEdge> getEdgeList(){
 		return this.edgeList;
 	}
 	
@@ -51,19 +51,19 @@ public class NData {
 		NVertex Vend = this.getVertex(end);
 		Vstart.removeConnection(end);
 		Vend.removeConnection(start);
-		//this.edgeListì—ì„œ start->end ì¸ê±° ì°¾ì•„ ì§€ìš°ê¸°
+		//this.edgeList¿¡¼­ start->end ÀÎ°Å Ã£¾Æ Áö¿ì±â
 	}
 	
 	public void removeVertex(int vid){
 		NVertex V = this.getVertex(vid);
-		List connected_vertex = V.getConnection();
-		while(connected_vertexê°€ ë¹Œë•Œê¹Œì§€){
-			int connected_vid = pop í•˜ê¸°
+		List<Integer> connected_vertex = V.getConnection();
+		while(connected_vertex°¡ ºô¶§±îÁö){
+			int connected_vid = pop ÇÏ±â
 			NVertex connected_V = this.getVertex(connected_vid);
 			connected_V.removeConnection(vid);
 			this.removeConnection(vid, connected_vid);
 			this.removeConnection(connected_vid, vid);
 		}
-		//vertexListì—ì„œ V ì§€ìš°ê¸°
+		//vertexList¿¡¼­ V Áö¿ì±â
 	}
 }
