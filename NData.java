@@ -4,9 +4,9 @@ import java.util.LinkedList;
 public class NData {
 	private List<NVertex> vertexList = new LinkedList<NVertex>();
 	private List<NEdge> edgeList = new LinkedList<NEdge>();
-    private int id = 0;
-    private int defaultWidth = 1;
-    private int defaultHeight = 1;
+	private int id = 0;
+	private int defaultWidth = 1;
+	private int defaultHeight = 1;
     
 	public void createVertex(String contents, int x, int y){
 		NVertex new_vertex = new NVertex();
@@ -36,7 +36,7 @@ public class NData {
 		return this.edgeList;
 	}
 	
-	public void connectVertex(int start, int end){
+	public void createEdge(int start, int end){
 		NVertex Vstart = this.getVertex(start);
 		NVertex Vend = this.getVertex(end); 
 		Vstart.makeConnection(end);
@@ -46,7 +46,7 @@ public class NData {
 		this.edgeList.add(new_connection);
 	}
 	
-	public void removeConnection(int start, int end){
+	public void removeEdge(int start, int end){
 		NVertex Vstart = this.getVertex(start);
 		NVertex Vend = this.getVertex(end);
 		Vstart.removeConnection(end);

@@ -19,14 +19,14 @@ public class NVertex {
 		this.Vheight = height;
 	}
 	
-	public void makeConnection(int v) {
+	public void makeConnection(int vid) {
 		//not implemented
-		//this.ConnectedVertex.add(v)???
+		//this.ConnectedVertex.add(vid)???
 	}
 	
-	public void removeConnection(int v) {
+	public void removeConnection(int vid) {
 		//not implemented
-		//this.ConnectedVertex.???(v)???
+		//this.ConnectedVertex.???(vid)???
 	}
 	
 	public List<Integer> getConnection() {
