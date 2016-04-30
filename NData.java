@@ -7,7 +7,27 @@ public class NData {
 	private int id = 0;
 	private int defaultWidth = 1;
 	private int defaultHeight = 1;
-    
+  
+	public List<NVertex> getVertexList(){
+		return this.vertexList;
+	}
+	
+	public List<NEdge> getEdgeList(){
+		return this.edgeList;
+	}
+	
+	public NVertex getVertex(int vid){
+		//있으면 오케이
+		//없으면 에러 error catch는 윗 클래스에서 처리
+		return //vertexList에서 vid인것 찾아주기
+	}
+	
+	public NEdge getEdge(int startId, int endId){
+		//있으면 오케이
+		//없으면 에러
+		return //edge List에서 해당 찾은거 리턴
+	}
+	
 	public void createVertex(String contents, int x, int y){
 		NVertex new_vertex = new NVertex();
 		new_vertex.init(id, contents, x, y, defaultWidth, defaultHeight);
@@ -22,21 +42,11 @@ public class NData {
 		this.id ++;
 	}
 	
-	public NVertex getVertex(int vid){
-		//있으면 오케이
-		//없으면 에러 error catch는 윗 클래스에서 처리
-		return //vertexList에서 vid인것 찾아주기
-	}
-	
-	public List<NVertex> getVertexList(){
-		return this.vertexList;
-	}
-	
-	public List<NEdge> getEdgeList(){
-		return this.edgeList;
-	}
-	
 	public void createEdge(int start, int end){
+		//try
+		//this.getEdge(start, end);
+		//this.getEdge(end, start);
+		//catch 하면 아래 실행
 		NVertex Vstart = this.getVertex(start);
 		NVertex Vend = this.getVertex(end); 
 		Vstart.makeConnection(end);
