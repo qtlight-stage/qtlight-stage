@@ -22,3 +22,14 @@ public class frameName2 extends JFrame {
       getContentPane().add(NewNode);
 }
 //NNode extends JTextPane
+
+//예외처리 예시
+		try {
+			throw new Exception();
+		}
+		catch(Exception e) {
+			System.out.println("catch\n");
+		}
+		finally {
+			System.out.println("final\n");
+		}
