@@ -10,15 +10,20 @@ public class NFrame extends JFrame{
 	private int EDefault = 0;
 	private int EOption = -1;
 	private int ECreateNode = 1;
-	private int ECreateArrow = 2;
-	private int ERemoveNode = 3;
+	private int ECreateArrowFst = 2;
+	private int ECreateArrowSnd = 3;
+	private int ERemoveNode = 4;
 	
 	private int Fwidth;
 	private int Fheight;
+	private int edgeWidth = 0;
+	private int edgeHeight = 25;
 	private int marginWidth = 8;
 	private int marginHeight = 55;
 	private int menuWidth = 140;
 	private int menuHeight = 20;
+	
+	private Node selectedNode = null;
 	
 	private NFrame MF = this;
 
@@ -73,21 +78,44 @@ public class NFrame extends JFrame{
         	if (eventnum == EOption)
         		return;
             JButton b = (JButton) e.getSource();
-            if (b.getText().equals("Create Node"))
+            if (b.getText().equals("Create Node")){
                 eventnum = ECreateNode;
-            else if (b.getText().equals("Create Arrow"))
-                eventnum = ECreateArrow;
-            else if (b.getText().equals("Remove Node"))
+                selectedNode = null;
+            }
+            else if (b.getText().equals("Create Arrow")){
+                eventnum = ECreateArrowFst;
+                selectedNode = null;
+            }
+            else if (b.getText().equals("Remove Node")){
                 eventnum = ERemoveNode;
+                selectedNode = null;
+            }
             else if (b.getText().equals("Clear")){
             	clearMindMap();
+            	selectedNode = null;
             }
         }
     }
     
     private class NodeActionListener implements ActionListener {//Node event
         public void actionPerformed(ActionEvent e) {
-        	if (eventnum == ERemoveNode){
+        	if(eventnum == ECreateArrowFst){
+        		selectedNode = (Node) e.getSource();
+        		eventnum = ECreateArrowSnd;
+        	}
+        	else if(eventnum == ECreateArrowSnd){
+        		Node n = (Node) e.getSource();
+        		Point startP = selectedNode.getLocation();
+        		Point endP = n.getLocation();
+        		Line newLine = new Line(selectedNode.getId(), n.getId(), startP.x, startP.y + edgeHeight, endP.x, endP.y + edgeHeight);
+        		clearMindMap();
+				lineList.add(newLine);
+				drawMindMap();
+        		selectedNode = null;
+        		eventnum = EDefault;
+        	}
+        	
+        	else if (eventnum == ERemoveNode){
         		Node n = (Node) e.getSource();
         		int nodeId = n.getId();
         		int i = 0;
@@ -100,6 +128,7 @@ public class NFrame extends JFrame{
         		nodeList.remove(i);
         		clearMindMap();
         		drawMindMap();
+        		eventnum = EDefault;
         	}
         }
     }
@@ -126,16 +155,6 @@ public class NFrame extends JFrame{
 			
 			public void mouseReleased(MouseEvent e){
 				endP = e.getPoint();
-				if(eventnum == ECreateArrow){
-					if ((startP.x != endP.x) && (startP.y != endP.y)){
-						if (startP.x < menuWidth || endP.x < menuWidth)
-							return;
-						clearMindMap();
-						lineList.add(new Line(startP.x + marginWidth, startP.y + marginHeight, endP.x + marginWidth, endP.y + marginHeight));
-						drawMindMap();				
-					}
-					eventnum = EDefault;
-				}
 			}
 		}
 	}
@@ -179,7 +198,9 @@ public class NFrame extends JFrame{
 		int x2;
 		int y2;
 		
-		Line(int _x1, int _y1, int _x2, int _y2){
+		Line(int _sid, int _eid, int _x1, int _y1, int _x2, int _y2){
+			this.startid = _sid;
+			this.endid = _eid;
 			this.x1 = _x1;
 			this.y1 = _y1;
 			this.x2 = _x2;
