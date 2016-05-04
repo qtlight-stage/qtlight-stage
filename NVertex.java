@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.LinkedList;
 
 public class NVertex {
 	private int Vid;
@@ -20,13 +19,20 @@ public class NVertex {
 	}
 	
 	public void makeConnection(int vid) {
-		//not implemented
-		//this.ConnectedVertex.add(vid)???
+		 vinteger = Integer.valueOf(vid);
+		 this.ConnectedVertex.add(vinteger);
 	}
 	
 	public void removeConnection(int vid) {
-		//not implemented
-		//this.ConnectedVertex.???(vid)???
+		Integer removeVertex;
+		for (int i=0; i<this.ConnectedVertex.size(); i++) {
+			Integer vertex = this.ConnectedVertex.get(i);
+			if (vertex.intValue() == vid) {
+				removeVertex = vertex;
+				break;
+			}
+		}
+		 this.ConnectedVertex.remove(removeVertex);
 	}
 	
 	public List<Integer> getConnection() {
