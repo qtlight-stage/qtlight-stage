@@ -9,9 +9,9 @@ public class NFrame extends JFrame{
 	public int eventnum = 0;
 	private int EDefault = 0;
 	private int EOption = -1;
-	private int EOptionFin = -2;
 	private int ECreateNode = 1;
 	private int ECreateArrow = 2;
+	private int ERemoveNode = 3;
 	
 	private int Fwidth;
 	private int Fheight;
@@ -22,6 +22,9 @@ public class NFrame extends JFrame{
 	
 	private NFrame MF = this;
 
+	private int nodeId = 0;
+	
+	private List<Node> nodeList = new LinkedList<Node>();
 	private List<Line> lineList = new LinkedList<Line>();
 	
 	public NFrame(int width, int height) {
@@ -42,23 +45,30 @@ public class NFrame extends JFrame{
 		mnMenu.add(mntmClose);
 		getContentPane().setLayout(null);
 		
-		JButton btnCN = new JButton("Create Node");
-		btnCN.setBounds(0, 0, menuWidth, menuHeight);
-		getContentPane().add(btnCN);
-		btnCN.addActionListener(new MyActionListener());
+		JButton bCreateNode = new JButton("Create Node");
+		bCreateNode.setBounds(0, 0, menuWidth, menuHeight);
+		getContentPane().add(bCreateNode);
+		bCreateNode.addActionListener(new MyActionListener());
 		
-		JButton btnCA = new JButton("Create Arrow");
-		btnCA.setBounds(0, menuHeight, menuWidth, menuHeight);
-		getContentPane().add(btnCA);
-		btnCA.addActionListener(new MyActionListener());
+		JButton bCreateArrow = new JButton("Create Arrow");
+		bCreateArrow.setBounds(0, menuHeight, menuWidth, menuHeight);
+		getContentPane().add(bCreateArrow);
+		bCreateArrow.addActionListener(new MyActionListener());
+		
+		JButton bRemoveNode = new JButton("Remove Node");
+		bRemoveNode.setBounds(0, 2 * menuHeight, menuWidth, menuHeight);
+		getContentPane().add(bRemoveNode);
+		bRemoveNode.addActionListener(new MyActionListener());
 		
 		JButton btnC = new JButton("Clear");
-		btnC.setBounds(0, 2 * menuHeight, menuWidth, menuHeight);
+		btnC.setBounds(0, 3 * menuHeight, menuWidth, menuHeight);
+		btnC.setFocusPainted(false);
+		btnC.setContentAreaFilled(false);
 		getContentPane().add(btnC);
 		btnC.addActionListener(new MyActionListener());
 	}
 	
-    private class MyActionListener implements ActionListener {
+    private class MyActionListener implements ActionListener {//butten event
         public void actionPerformed(ActionEvent e) {
         	if (eventnum == EOption)
         		return;
@@ -67,10 +77,30 @@ public class NFrame extends JFrame{
                 eventnum = ECreateNode;
             else if (b.getText().equals("Create Arrow"))
                 eventnum = ECreateArrow;
+            else if (b.getText().equals("Remove Node"))
+                eventnum = ERemoveNode;
             else if (b.getText().equals("Clear")){
-            	Graphics g = getGraphics();
-				g.clearRect(menuWidth + marginWidth, marginHeight, Fwidth, Fheight);// 노드 못지움
+            	clearMindMap();
             }
+        }
+    }
+    
+    private class NodeActionListener implements ActionListener {//Node event
+        public void actionPerformed(ActionEvent e) {
+        	if (eventnum == ERemoveNode){
+        		Node n = (Node) e.getSource();
+        		int nodeId = n.getId();
+        		int i = 0;
+        		while (i < nodeList.size()){
+        			if(nodeList.get(i).getId() == nodeId)
+        				break;
+        			i++;
+        		}
+        		getContentPane().remove(nodeList.get(i));
+        		nodeList.remove(i);
+        		clearMindMap();
+        		drawMindMap();
+        	}
         }
     }
 	
@@ -100,10 +130,9 @@ public class NFrame extends JFrame{
 					if ((startP.x != endP.x) && (startP.y != endP.y)){
 						if (startP.x < menuWidth || endP.x < menuWidth)
 							return;
-						Graphics g = getGraphics();
-						g.clearRect(menuWidth + marginWidth, marginHeight, Fwidth, Fheight);
+						clearMindMap();
 						lineList.add(new Line(startP.x + marginWidth, startP.y + marginHeight, endP.x + marginWidth, endP.y + marginHeight));
-						drawLine();				
+						drawMindMap();				
 					}
 					eventnum = EDefault;
 				}
@@ -111,12 +140,34 @@ public class NFrame extends JFrame{
 		}
 	}
 	
-	public void drawLine(){
+	public void clearMindMap(){
+    	Graphics g = getLayeredPane().getGraphics();
+		g.clearRect(menuWidth + marginWidth, marginHeight, Fwidth, Fheight);
 		int i = 0;
-		Graphics g = getGraphics();
+	}
+	
+	public void drawMindMap(){
+		int i = 0;
+		Graphics g = getLayeredPane().getGraphics();
 		while (i < lineList.size()){
 			g.drawLine(lineList.get(i).x1, lineList.get(i).y1, lineList.get(i).x2, lineList.get(i).y2);
 			i++;
+		}
+		i = 0;
+		while (i < nodeList.size()){
+//			nodeList.get(i).setText(String.valueOf(nodeList.get(i).getId()));
+			nodeList.get(i).updateUI();
+			i++;
+		}
+	}
+	
+	class Node extends JButton{
+		private int id;
+		Node(int _id){
+			id = _id;
+		}
+		int getId(){
+			return id;
 		}
 	}
 	
@@ -184,7 +235,7 @@ public class NFrame extends JFrame{
     		getContentPane().add(Ocontents);
     		
     		Owidth = new JTextPane();
-    		Owidth.setText("75");
+    		Owidth.setText("120");
     		Owidth.setBounds(marginWidth + labelWidth, 2 * marginHeight + labelHeight, labelWidth, labelHeight);
     		getContentPane().add(Owidth);
     		
@@ -208,20 +259,23 @@ public class NFrame extends JFrame{
     		public void actionPerformed(ActionEvent e) {
     			JButton b = (JButton) e.getSource();
     			if (b.getText().equals("Create")){
-    				JTextPane txtpnAaa = new JTextPane();
-    				txtpnAaa.setText(Ocontents.getText());
-    				txtpnAaa.setEditable(false);
-    				txtpnAaa.setBounds(P.x, P.y, Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
-    				PF.getContentPane().add(txtpnAaa);	
+    				Node newNode = new Node(PF.nodeId);
+    				newNode.setText(Ocontents.getText());
+    				newNode.setBounds(P.x, P.y, Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
+    				newNode.setFocusPainted(false);
+    				newNode.setContentAreaFilled(false);
+    				newNode.addActionListener(new NodeActionListener());
+    				PF.nodeList.add(newNode);
+    				PF.getContentPane().add(newNode);
+    				newNode.updateUI();
+    				PF.nodeId++;
     				PF.eventnum = EDefault;
-    	    		dispose();
+    				dispose();
     			}
     			else if (b.getText().equals("Cancel")){
     				PF.eventnum = EDefault;
     	    		dispose();		
     			}
-    			
-    		dispose();
     		}
     	}
     }
