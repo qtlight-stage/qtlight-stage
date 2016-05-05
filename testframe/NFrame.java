@@ -29,51 +29,64 @@ public class NFrame extends JFrame{
 
 	private int nodeId = 0;
 	
+	private NData mindMapData = new NData(); 
 	private List<Node> nodeList = new LinkedList<Node>();
-	private List<Line> lineList = new LinkedList<Line>();
 	
 	public NFrame(int width, int height) {
 		setTitle("NMindMap");
-		
 		Fwidth = width;
 		Fheight = height;
 		
-		setContentPane(new MyPanel());
+		setContentPane(new MindMapPanel());
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
 		JMenu mnMenu = new JMenu("Menu");
 		menuBar.add(mnMenu);
-		
 		JMenuItem mntmClose = new JMenuItem("Close");
 		mnMenu.add(mntmClose);
 		getContentPane().setLayout(null);
 		
-		JButton bCreateNode = new JButton("Create Node");
-		bCreateNode.setBounds(0, 0, menuWidth, menuHeight);
-		getContentPane().add(bCreateNode);
-		bCreateNode.addActionListener(new MyActionListener());
-		
-		JButton bCreateArrow = new JButton("Create Arrow");
-		bCreateArrow.setBounds(0, menuHeight, menuWidth, menuHeight);
-		getContentPane().add(bCreateArrow);
-		bCreateArrow.addActionListener(new MyActionListener());
-		
-		JButton bRemoveNode = new JButton("Remove Node");
-		bRemoveNode.setBounds(0, 2 * menuHeight, menuWidth, menuHeight);
-		getContentPane().add(bRemoveNode);
-		bRemoveNode.addActionListener(new MyActionListener());
+		this.addMenuButton("Create Node", 0, 0);
+		this.addMenuButton("Create Arrow", 0, menuHeight);
+		this.addMenuButton("Remove Node", 0, 2 * menuHeight);
 		
 		JButton btnC = new JButton("Clear");
 		btnC.setBounds(0, 3 * menuHeight, menuWidth, menuHeight);
 		btnC.setFocusPainted(false);
 		btnC.setContentAreaFilled(false);
 		getContentPane().add(btnC);
-		btnC.addActionListener(new MyActionListener());
+		btnC.addActionListener(new MenuActionListener());
 	}
 	
-    private class MyActionListener implements ActionListener {//butten event
+	public void addMenuButton(String name, int x, int y){
+		JButton newButton = new JButton(name);
+		newButton.setBounds(x, y, menuWidth, menuHeight);
+		newButton.addActionListener(new MenuActionListener());
+		this.getContentPane().add(newButton);
+	}
+	
+	public void addNode(String contents, int x, int y, int width, int height){
+		this.mindMapData.createVertex(contents, x, y, width, height);
+		Node newNode = new Node(nodeId);
+		newNode.setText(contents);
+		newNode.setBounds(x, y, width, height);
+		newNode.setFocusPainted(false);
+		newNode.setContentAreaFilled(false);
+		newNode.addActionListener(new NodeActionListener());
+		nodeList.add(newNode);
+		this.getContentPane().add(newNode);
+		newNode.updateUI();
+		this.nodeId++;
+	}
+	
+	public void addArrow(Node start, Node end){
+		this.mindMapData.createEdge(start.getId(), end.getId());
+		clearMindMap();
+		drawMindMap();
+	}
+	
+    private class MenuActionListener implements ActionListener {//butten event
         public void actionPerformed(ActionEvent e) {
         	if (eventnum == EOption)
         		return;
@@ -81,12 +94,10 @@ public class NFrame extends JFrame{
             if (b.getText().equals("Create Node")){
                 eventnum = ECreateNode;
                 selectedNode = null;
-            }
-            else if (b.getText().equals("Create Arrow")){
-                eventnum = ECreateArrowFst;
-                selectedNode = null;
-            }
-            else if (b.getText().equals("Remove Node")){
+            } else if (b.getText().equals("Create Arrow")){
+            	eventnum = ECreateArrowFst;
+            	selectedNode = null;
+            } else if (b.getText().equals("Remove Node")){
                 eventnum = ERemoveNode;
                 selectedNode = null;
             }
@@ -102,15 +113,11 @@ public class NFrame extends JFrame{
         	if(eventnum == ECreateArrowFst){
         		selectedNode = (Node) e.getSource();
         		eventnum = ECreateArrowSnd;
-        	}
-        	else if(eventnum == ECreateArrowSnd){
+        	} else if(eventnum == ECreateArrowSnd){
         		Node n = (Node) e.getSource();
-        		Point startP = selectedNode.getLocation();
-        		Point endP = n.getLocation();
-        		Line newLine = new Line(selectedNode.getId(), n.getId(), startP.x, startP.y + edgeHeight, endP.x, endP.y + edgeHeight);
-        		clearMindMap();
-				lineList.add(newLine);
-				drawMindMap();
+        		if (selectedNode.getId() == n.getId())
+        			return;
+        		addArrow(selectedNode, n);
         		selectedNode = null;
         		eventnum = EDefault;
         	}
@@ -133,18 +140,17 @@ public class NFrame extends JFrame{
         }
     }
 	
-	class MyPanel extends JPanel{
+	class MindMapPanel extends JPanel{
 		Point startP = null;
 		Point endP = null;
 		
-		public MyPanel(){
+		public MindMapPanel(){
 			this.addMouseListener(new MyMouseListener());
 		}
 		
 		class MyMouseListener extends MouseAdapter{
 			public void mousePressed(MouseEvent e){
 				startP = e.getPoint();
-				
 				if(eventnum == ECreateNode){
 					if (startP.x < menuWidth)
 						return;
@@ -162,17 +168,17 @@ public class NFrame extends JFrame{
 	public void clearMindMap(){
     	Graphics g = getLayeredPane().getGraphics();
 		g.clearRect(menuWidth + marginWidth, marginHeight, Fwidth, Fheight);
-		int i = 0;
 	}
 	
 	public void drawMindMap(){
 		int i = 0;
 		Graphics g = getLayeredPane().getGraphics();
-		while (i < lineList.size()){
-			g.drawLine(lineList.get(i).x1, lineList.get(i).y1, lineList.get(i).x2, lineList.get(i).y2);
+		List<NEdge> edgeList = this.mindMapData.getEdgeList();
+		while (i < edgeList.size()){
+			g.drawLine(edgeList.get(i).getStartX(), edgeList.get(i).getStartY() + edgeHeight,
+			           edgeList.get(i).getEndX(), edgeList.get(i).getEndY() + edgeHeight);
 			i++;
-		}
-		i = 0;
+		} i = 0;
 		while (i < nodeList.size()){
 //			nodeList.get(i).setText(String.valueOf(nodeList.get(i).getId()));
 			nodeList.get(i).updateUI();
@@ -190,25 +196,6 @@ public class NFrame extends JFrame{
 		}
 	}
 	
-	class Line{
-		int startid;
-		int endid;
-		int x1;
-		int y1;
-		int x2;
-		int y2;
-		
-		Line(int _sid, int _eid, int _x1, int _y1, int _x2, int _y2){
-			this.startid = _sid;
-			this.endid = _eid;
-			this.x1 = _x1;
-			this.y1 = _y1;
-			this.x2 = _x2;
-			this.y2 = _y2;
-		}
-	}
-	
-
     class CreateNodeOptionFrame extends JFrame{
     	private Point P;
     	private NFrame PF;
@@ -280,16 +267,7 @@ public class NFrame extends JFrame{
     		public void actionPerformed(ActionEvent e) {
     			JButton b = (JButton) e.getSource();
     			if (b.getText().equals("Create")){
-    				Node newNode = new Node(PF.nodeId);
-    				newNode.setText(Ocontents.getText());
-    				newNode.setBounds(P.x, P.y, Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
-    				newNode.setFocusPainted(false);
-    				newNode.setContentAreaFilled(false);
-    				newNode.addActionListener(new NodeActionListener());
-    				PF.nodeList.add(newNode);
-    				PF.getContentPane().add(newNode);
-    				newNode.updateUI();
-    				PF.nodeId++;
+    				addNode(Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
     				PF.eventnum = EDefault;
     				dispose();
     			}
