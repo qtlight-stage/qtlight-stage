@@ -1,4 +1,6 @@
+package NMindMap;
 import java.util.List;
+import java.util.LinkedList;
 
 public class NVertex {
 	private int Vid;
@@ -19,20 +21,18 @@ public class NVertex {
 	}
 	
 	public void makeConnection(int vid) {
-		 vinteger = Integer.valueOf(vid);
-		 this.ConnectedVertex.add(vinteger);
+		this.ConnectedVertex.add(vid);
 	}
 	
 	public void removeConnection(int vid) {
-		Integer removeVertex;
-		for (int i=0; i<this.ConnectedVertex.size(); i++) {
-			Integer vertex = this.ConnectedVertex.get(i);
-			if (vertex.intValue() == vid) {
-				removeVertex = vertex;
-				break;
+		int i = 0;
+		while (i < ConnectedVertex.size()){
+			if(ConnectedVertex.get(i) == vid){
+				ConnectedVertex.remove(i);
+				return;
 			}
+			i++;
 		}
-		 this.ConnectedVertex.remove(removeVertex);
 	}
 	
 	public List<Integer> getConnection() {
@@ -53,29 +53,12 @@ public class NVertex {
 		this.Vheight = new_h;
 	}
 	
-	public int id() {
-		return this.Vid;
-	}
-	
-	public String contents() {
-		return this.Vcontents;
-	}
-	
-	public int x() {
-		return this.Vx;
-	}
-	
-	public int y() {
-		return this.Vy;
-	}
-	
-	public int width() {
-		return this.Vwidth;
-	}
-	
-	public int height() {
-		return this.Vheight;
-	}
+	public int id() {return this.Vid;}
+	public String contents() {return this.Vcontents;}
+	public int x() {return this.Vx;}
+	public int y() {return this.Vy;}
+	public int width() {return this.Vwidth;}
+	public int height() {return this.Vheight;}
 	
 	
 }
