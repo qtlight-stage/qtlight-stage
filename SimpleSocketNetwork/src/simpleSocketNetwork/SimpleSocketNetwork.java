@@ -67,8 +67,10 @@ public class SimpleSocketNetwork {
                     final String built = stringBuilder.toString();
                     System.out.print("Received message: " + built + "\n");
                     if (built.equals("hi") || built.equals("hi\r")) {
+                        System.out.print("Sent: hello\n");
                         ch.write(StandardCharsets.UTF_8.encode("hello\n"));
                     } else {
+                        System.out.print("Sent: hell\n");
                         ch.write(StandardCharsets.UTF_8.encode("hell\n"));
                     }
 
