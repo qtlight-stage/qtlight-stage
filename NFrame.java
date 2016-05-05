@@ -29,6 +29,7 @@ public class NFrame extends JFrame{
 	
 	private Node selectedNode = null;
 	
+	private NCommend commend;
 	private NFrame MF = this;
 	
 	private NData mindMapData = new NData(); 
@@ -55,6 +56,10 @@ public class NFrame extends JFrame{
 		this.addMenuButton("Remove Arrow", 0, 3 * menuHeight);
 		this.addMenuButton("Edit Node", 0, 4 * menuHeight);
 		this.addMenuButton("Move Node", 0, 5 * menuHeight);
+	}
+	
+	public void setMain(NCommend _M){
+		commend = _M;
 	}
 	
 	public void addMenuButton(String name, int x, int y){
@@ -101,7 +106,6 @@ public class NFrame extends JFrame{
 		drawMindMap();
 	}
 
-	
 	public void editNode(Node n, String contents, int width, int height){
 		this.getContentPane().remove(n);
 		int nodeId = n.getId();
@@ -206,7 +210,7 @@ public class NFrame extends JFrame{
         		Node n = (Node) e.getSource();
         		if (selectedNode.getId() == n.getId())
         			return;
-        		addArrow(selectedNode, n);
+        		commend.commendAddArrow(MF, selectedNode, n);
         		selectedNode = null;
         		eventnum = EDefault;
         	}
@@ -218,14 +222,14 @@ public class NFrame extends JFrame{
         		Node n = (Node) e.getSource();
         		if (selectedNode.getId() == n.getId())
         			return;
-        		removeArrow(selectedNode, n);
+        		commend.commendRemoveArrow(MF, selectedNode, n);
         		selectedNode = null;
         		eventnum = EDefault;
         	}
         	
         	else if (eventnum == ERemoveNode){
         		Node n = (Node) e.getSource();
-        		removeNode(n);
+        		commend.commendRemoveNode(MF, n);
         		eventnum = EDefault;
         	}
         	
@@ -258,7 +262,7 @@ public class NFrame extends JFrame{
 				} else if(eventnum == EMoveNode){
 					if (startP.x < menuWidth || selectedNode == null)
 						return;
-					moveNode(selectedNode, startP.x, startP.y);
+					commend.commendMoveNode(MF, selectedNode, startP.x, startP.y);
 					eventnum = EDefault;
 				}
 			}
@@ -350,7 +354,7 @@ public class NFrame extends JFrame{
     		public void actionPerformed(ActionEvent e) {
     			JButton b = (JButton) e.getSource();
     			if (b.getText().equals("Create")){
-    				addNode(Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
+    				commend.commendAddNode(PF, Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
     				dispose();
     				PF.eventnum = EDefault;
     			}
@@ -433,7 +437,7 @@ public class NFrame extends JFrame{
     		public void actionPerformed(ActionEvent e) {
     			JButton b = (JButton) e.getSource();
     			if (b.getText().equals("Confirm")){
-    				editNode(N, Ocontents.getText(), Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
+    				commend.commendEditNode(PF, N, Ocontents.getText(), Integer.valueOf(Owidth.getText()), Integer.valueOf(Oheight.getText()));
     				dispose();
     				PF.eventnum = EDefault;
     			}
