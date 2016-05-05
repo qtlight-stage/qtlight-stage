@@ -21,13 +21,18 @@ public class NVertex {
 	}
 	
 	public void makeConnection(int vid) {
-		//not implemented
-		//this.ConnectedVertex.add(vid)???
+		this.ConnectedVertex.add(vid);
 	}
 	
 	public void removeConnection(int vid) {
-		//not implemented
-		//this.ConnectedVertex.???(vid)???
+		int i = 0;
+		while (i < ConnectedVertex.size()){
+			if(ConnectedVertex.get(i) == vid){
+				ConnectedVertex.remove(i);
+				return;
+			}
+			i++;
+		}
 	}
 	
 	public List<Integer> getConnection() {
@@ -48,29 +53,12 @@ public class NVertex {
 		this.Vheight = new_h;
 	}
 	
-	public int id() {
-		return this.Vid;
-	}
-	
-	public String contents() {
-		return this.Vcontents;
-	}
-	
-	public int x() {
-		return this.Vx;
-	}
-	
-	public int y() {
-		return this.Vy;
-	}
-	
-	public int width() {
-		return this.Vwidth;
-	}
-	
-	public int height() {
-		return this.Vheight;
-	}
+	public int id() {return this.Vid;}
+	public String contents() {return this.Vcontents;}
+	public int x() {return this.Vx;}
+	public int y() {return this.Vy;}
+	public int width() {return this.Vwidth;}
+	public int height() {return this.Vheight;}
 	
 	
 }

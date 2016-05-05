@@ -10,9 +10,11 @@ public class NFrame extends JFrame{
 	private int EDefault = 0;
 	private int EOption = -1;
 	private int ECreateNode = 1;
-	private int ECreateArrowFst = 2;
-	private int ECreateArrowSnd = 3;
-	private int ERemoveNode = 4;
+	private int ERemoveNode = 2;
+	private int ECreateArrowFst = 3;
+	private int ECreateArrowSnd = 4;
+	private int ERemoveArrowFst = 5;
+	private int ERemoveArrowSnd = 6;
 	
 	private int Fwidth;
 	private int Fheight;
@@ -26,8 +28,6 @@ public class NFrame extends JFrame{
 	private Node selectedNode = null;
 	
 	private NFrame MF = this;
-
-	private int nodeId = 0;
 	
 	private NData mindMapData = new NData(); 
 	private List<Node> nodeList = new LinkedList<Node>();
@@ -48,15 +48,9 @@ public class NFrame extends JFrame{
 		getContentPane().setLayout(null);
 		
 		this.addMenuButton("Create Node", 0, 0);
-		this.addMenuButton("Create Arrow", 0, menuHeight);
-		this.addMenuButton("Remove Node", 0, 2 * menuHeight);
-		
-		JButton btnC = new JButton("Clear");
-		btnC.setBounds(0, 3 * menuHeight, menuWidth, menuHeight);
-		btnC.setFocusPainted(false);
-		btnC.setContentAreaFilled(false);
-		getContentPane().add(btnC);
-		btnC.addActionListener(new MenuActionListener());
+		this.addMenuButton("Remove Node", 0, menuHeight);
+		this.addMenuButton("Create Arrow", 0, 2 * menuHeight);
+		this.addMenuButton("Remove Arrow", 0, 3 * menuHeight);
 	}
 	
 	public void addMenuButton(String name, int x, int y){
@@ -67,7 +61,7 @@ public class NFrame extends JFrame{
 	}
 	
 	public void addNode(String contents, int x, int y, int width, int height){
-		this.mindMapData.createVertex(contents, x, y, width, height);
+		int nodeId = this.mindMapData.createVertex(contents, x, y, width, height);
 		Node newNode = new Node(nodeId);
 		newNode.setText(contents);
 		newNode.setBounds(x, y, width, height);
@@ -77,7 +71,21 @@ public class NFrame extends JFrame{
 		nodeList.add(newNode);
 		this.getContentPane().add(newNode);
 		newNode.updateUI();
-		this.nodeId++;
+	}
+	
+	public void removeNode(Node n){
+		int nodeId = n.getId();
+		this.mindMapData.removeVertex(nodeId);
+		int i = 0;
+		while (i < nodeList.size()){
+			if(nodeList.get(i).getId() == nodeId)
+				break;
+			i++;
+		}
+		getContentPane().remove(nodeList.get(i));
+		nodeList.remove(i);
+		clearMindMap();
+		drawMindMap();
 	}
 	
 	public void addArrow(Node start, Node end){
@@ -85,6 +93,18 @@ public class NFrame extends JFrame{
 		clearMindMap();
 		drawMindMap();
 	}
+	
+	public void removeArrow(Node start, Node end){
+		this.mindMapData.removeEdge(start.getId(), end.getId());
+		clearMindMap();
+		drawMindMap();
+	}
+
+	
+	//editNode(){}
+	
+	//위치 조정(){}
+	
 	
     private class MenuActionListener implements ActionListener {//butten event
         public void actionPerformed(ActionEvent e) {
@@ -94,12 +114,15 @@ public class NFrame extends JFrame{
             if (b.getText().equals("Create Node")){
                 eventnum = ECreateNode;
                 selectedNode = null;
-            } else if (b.getText().equals("Create Arrow")){
-            	eventnum = ECreateArrowFst;
-            	selectedNode = null;
             } else if (b.getText().equals("Remove Node")){
                 eventnum = ERemoveNode;
                 selectedNode = null;
+            } else if (b.getText().equals("Create Arrow")){
+            	eventnum = ECreateArrowFst;
+            	selectedNode = null;
+            } else if (b.getText().equals("Remove Arrow")){
+            	eventnum = ERemoveArrowFst;
+            	selectedNode = null;
             }
             else if (b.getText().equals("Clear")){
             	clearMindMap();
@@ -122,9 +145,22 @@ public class NFrame extends JFrame{
         		eventnum = EDefault;
         	}
         	
+        	else if(eventnum == ERemoveArrowFst){
+        		selectedNode = (Node) e.getSource();
+        		eventnum = ERemoveArrowSnd;
+        	} else if(eventnum == ERemoveArrowSnd){
+        		Node n = (Node) e.getSource();
+        		if (selectedNode.getId() == n.getId())
+        			return;
+        		removeArrow(selectedNode, n);
+        		selectedNode = null;
+        		eventnum = EDefault;
+        	}
+        	
         	else if (eventnum == ERemoveNode){
         		Node n = (Node) e.getSource();
-        		int nodeId = n.getId();
+        		removeNode(n);
+/*        		int nodeId = n.getId();
         		int i = 0;
         		while (i < nodeList.size()){
         			if(nodeList.get(i).getId() == nodeId)
@@ -134,7 +170,7 @@ public class NFrame extends JFrame{
         		getContentPane().remove(nodeList.get(i));
         		nodeList.remove(i);
         		clearMindMap();
-        		drawMindMap();
+        		drawMindMap();*/
         		eventnum = EDefault;
         	}
         }
