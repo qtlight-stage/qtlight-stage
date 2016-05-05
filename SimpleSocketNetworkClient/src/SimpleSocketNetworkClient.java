@@ -1,38 +1,56 @@
-package simpleSocketNetwork;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
 
-public class SimpleSocketNetwork {
+/**
+ * Created by sasch on 5/5/2016.
+ */
+public class SimpleSocketNetworkClient {
+    public static void main(String[] args) throws IOException {
+        final AsynchronousSocketChannel ch = AsynchronousSocketChannel.open();
+        ch.connect(new InetSocketAddress("localhost", 8080), null, new CompletionHandler<Void, Void>() {
+            @Override
+            public void completed(Void result, Void attachment) {
+                System.out.print("Connected to server\n");
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        final AsynchronousServerSocketChannel listener =
-                AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
-        System.out.print("Waiting new connection...");
-
-        listener.accept(null, new CompletionHandler<AsynchronousSocketChannel, Void>() {
-            public void completed(AsynchronousSocketChannel ch, Void att) {
-                System.out.print("Connected\n");
-
-                // accept the next connection
-                listener.accept(null, this);
-
-                // handle this connection
-                handleChannel(ch);
             }
 
-            public void failed(Throwable exc, Void att) {
+            @Override
+            public void failed(Throwable exc, Void attachment) {
 
             }
         });
 
-        System.in.read();
+        handleChannel(ch);
+
+        StringBuilder builder = new StringBuilder();
+
+        while (true) {
+            int read = System.in.read();
+            Character c = (char)read;
+            builder.append(c);
+
+            if (c.equals('\n')) {
+                String str = builder.toString();
+                ByteBuffer buffer = ByteBuffer.wrap(builder.toString().getBytes("UTF-8"));
+                ch.write(buffer, buffer, new CompletionHandler<Integer, ByteBuffer>() {
+                    @Override
+                    public void completed(Integer result, ByteBuffer attachment) {
+                        System.out.print("\nSent: " + str);
+                    }
+
+                    @Override
+                    public void failed(Throwable exc, ByteBuffer attachment) {
+
+                    }
+                });
+                builder.setLength(0);
+            }
+        }
     }
 
     private static void handleChannel(final AsynchronousSocketChannel ch) {
@@ -66,11 +84,6 @@ public class SimpleSocketNetwork {
                     // new complete message has arrived, handle this!
                     final String built = stringBuilder.toString();
                     System.out.print("Received message: " + built + "\n");
-                    if (built.equals("hi") || built.equals("hi\r")) {
-                        ch.write(StandardCharsets.UTF_8.encode("hello\n"));
-                    } else {
-                        ch.write(StandardCharsets.UTF_8.encode("hell\n"));
-                    }
 
                     stringBuilder.setLength(0);
                 }
@@ -89,4 +102,5 @@ public class SimpleSocketNetwork {
             }
         });
     }
+
 }
