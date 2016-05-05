@@ -8,11 +8,11 @@ import java.io.IOException;
 public class JSONFileSaver {
     public static void main(String[] args) throws IOException {
         JsonObject json = Json.createObjectBuilder()
-            .add("project", "java")
-            .add("term", Json.createArrayBuilder()
-                .add("201603")
-                .add("201606")
-            ).build();
+                .add("project", "java")
+                .add("term", Json.createArrayBuilder()
+                        .add("201603")
+                        .add("201606")
+                ).build();
 
         String str = json.toString();
 
