@@ -14,7 +14,7 @@ public class NMain {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
 
-		// ¾Æ·¡ºÎºĞ¿¡ ³×Æ®¿öÅ© Åë½Å ºÎºĞ ÇÊ¿ä
+		// ì•„ë˜ë¶€ë¶„ì— ë„¤íŠ¸ì›Œí¬ í†µì‹  ë¶€ë¶„ í•„ìš”
 		long start = System.currentTimeMillis();
 		long end = System.currentTimeMillis();
 		int x = 100;
