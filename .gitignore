@@ -3,13 +3,12 @@
 .idea/
 .metadata/
 
-!lib/
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
 *.jar
+!lib/*.jar
 *.war
 *.ear
 
