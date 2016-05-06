@@ -53,10 +53,10 @@ public class NData {
         Vend.removeConnection(start);
         int i = 0;
         while (i < edgeList.size()) {
-            if (edgeList.get(i).getStart() == start && edgeList.get(i).getEnd() == end) {
+            if (edgeList.get(i).getStartId() == start && edgeList.get(i).getEndId() == end) {
                 edgeList.remove(i);
                 return;
-            } else if (edgeList.get(i).getStart() == end && edgeList.get(i).getEnd() == start) {
+            } else if (edgeList.get(i).getStartId() == end && edgeList.get(i).getEndId() == start) {
                 edgeList.remove(i);
                 return;
             }

@@ -4,8 +4,8 @@ import javax.json.Json;
 import javax.json.JsonObject;
 
 public class NEdge {
-	private int Nstart;
-	private int Nend;
+	private int NstartId;
+	private int NendId;
 	private int NstartX;
 	private int NstartY;
 	private int NstartWidth;
@@ -16,13 +16,13 @@ public class NEdge {
 	private int NendHeight;
 
 	public void init (NVertex start, NVertex end){
-		this.Nstart = start.id();
+		this.NstartId = start.id();
 		this.NstartX = start.x();
 		this.NstartY = start.y();
 		this.NstartWidth = start.width();
 		this.NstartHeight = start.height();
 
-		this.Nend = end.id();
+		this.NendId = end.id();
 		this.NendX = end.x();
 		this.NendY = end.y();
 		this.NendWidth = end.width();
@@ -30,7 +30,7 @@ public class NEdge {
 	}
 
 	public void modifyStart (NVertex start){
-		this.Nstart = start.id();
+		this.NstartId = start.id();
 		this.NstartX = start.x();
 		this.NstartY = start.y();
 		this.NstartWidth = start.width();
@@ -38,15 +38,15 @@ public class NEdge {
 	}
 
 	public void modifyEnd (NVertex end){
-		this.Nend = end.id();
+		this.NendId = end.id();
 		this.NendX = end.x();
 		this.NendY = end.y();
 		this.NendWidth = end.width();
 		this.NendHeight = end.height();
 	}
 
-	public int getStart(){ return this.Nstart;}
-	public int getEnd(){return this.Nend;}
+	public int getStartId(){ return this.NstartId;}
+	public int getEndId(){return this.NendId;}
 
 	public int getStartX(){return this.NstartX + (this.NstartWidth / 2);}
 	public int getStartY(){return this.NstartY + (this.NstartHeight / 2);}
@@ -55,8 +55,8 @@ public class NEdge {
 
 	public JsonObject toJson() {
 		return Json.createObjectBuilder()
-				.add("start_vertex", this.Nstart)
-				.add("end_vertex", this.Nend)
+				.add("start_vertex", this.NstartId)
+				.add("end_vertex", this.NendId)
 				.build();
 	}
 }

@@ -118,9 +118,9 @@ public class NFrame extends JFrame {
 		NEdge e;
 		while (i < edgeList.size()) {
 			e = edgeList.get(i);
-			if (e.getStart() == nodeId) {
+			if (e.getStartId() == nodeId) {
 				e.modifyStart(v);
-			} else if (e.getEnd() == nodeId) {
+			} else if (e.getEndId() == nodeId) {
 				e.modifyEnd(v);
 			}
 			i++;
@@ -141,9 +141,9 @@ public class NFrame extends JFrame {
 		NEdge e;
 		while (i < edgeList.size()) {
 			e = edgeList.get(i);
-			if (e.getStart() == nodeId) {
+			if (e.getStartId() == nodeId) {
 				e.modifyStart(v);
-			} else if (e.getEnd() == nodeId) {
+			} else if (e.getEndId() == nodeId) {
 				e.modifyEnd(v);
 			}
 			i++;
