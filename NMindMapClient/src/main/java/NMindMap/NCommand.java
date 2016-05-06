@@ -21,23 +21,23 @@ public class NCommand {
                 .build();
     }
 
-    public void commandRemoveNode(NFrame f, Node n) {
-        f.removeNode(n);
+    public void commandRemoveNode(NFrame f, int nodeId) {
+        f.removeNode(nodeId);
     }
 
-    public void commandAddArrow(NFrame f, Node start, Node end) {
-        f.addArrow(start, end);
+    public void commandAddArrow(NFrame f, int startId, int endId) {
+        f.addArrow(startId, endId);
     }
 
-    public void commandRemoveArrow(NFrame f, Node start, Node end) {
-        f.removeArrow(start, end);
+    public void commandRemoveArrow(NFrame f, int startId, int endId) {
+        f.removeArrow(startId, endId);
     }
 
-    public void commandEditNode(NFrame f, Node n, String contents, int width, int height) {
-        f.editNode(n, contents, width, height);
+    public void commandEditNode(NFrame f, int nodeId, String contents, int width, int height) {
+        f.editNode(nodeId, contents, width, height);
     }
 
-    public void commandMoveNode(NFrame f, Node n, int x, int y) {
-        f.moveNode(n, x, y);
+    public void commandMoveNode(NFrame f, int nodeId, int x, int y) {
+        f.moveNode(nodeId, x, y);
     }
 }

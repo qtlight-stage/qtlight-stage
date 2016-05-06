@@ -30,7 +30,7 @@ public class NFrame extends JFrame {
 
 	private Node selectedNode = null;
 
-	private NCommand commend;
+	private NCommand command;
 	private NFrame MF = this;
 
 	private NData mindMapData = new NData();
@@ -59,8 +59,8 @@ public class NFrame extends JFrame {
 		this.addMenuButton("Move Node", 0, 5 * menuHeight);
 	}
 
-	public void setMain(NCommand _M) {
-		commend = _M;
+	public void setMain(NCommand M) {
+		command = M;
 	}
 
 	public void addMenuButton(String name, int x, int y) {
@@ -70,6 +70,16 @@ public class NFrame extends JFrame {
 		this.getContentPane().add(newButton);
 	}
 
+	public Node findNode(int nodeId){
+		int i = 0;
+		while (i < nodeList.size()) {
+			if (nodeList.get(i).getId() == nodeId)
+				break;
+			i++;
+		}
+		return nodeList.get(i);
+	}
+	
 	public void addNode(String contents, int x, int y, int width, int height) {
 		int nodeId = this.mindMapData.createVertex(contents, x, y, width, height);
 		Node newNode = new Node(nodeId);
@@ -83,8 +93,7 @@ public class NFrame extends JFrame {
 		newNode.updateUI();
 	}
 
-	public void removeNode(Node n) {
-		int nodeId = n.getId();
+	public void removeNode(int nodeId) {
 		this.mindMapData.removeVertex(nodeId);
 		int i = 0;
 		while (i < nodeList.size()) {
@@ -97,19 +106,19 @@ public class NFrame extends JFrame {
 		drawMindMap();
 	}
 
-	public void addArrow(Node start, Node end) {
-		this.mindMapData.createEdge(start.getId(), end.getId());
+	public void addArrow(int startId, int endId) {
+		this.mindMapData.createEdge(startId, endId);
 		drawMindMap();
 	}
 
-	public void removeArrow(Node start, Node end) {
-		this.mindMapData.removeEdge(start.getId(), end.getId());
+	public void removeArrow(int startId, int endId) {
+		this.mindMapData.removeEdge(startId, endId);
 		drawMindMap();
 	}
 
-	public void editNode(Node n, String contents, int width, int height) {
+	public void editNode(int nodeId, String contents, int width, int height) {
+		Node n = this.findNode(nodeId);
 		this.getContentPane().remove(n);
-		int nodeId = n.getId();
 		NVertex v = this.mindMapData.getVertex(nodeId);
 		v.modifyContents(contents);
 		v.modifySize(width, height);
@@ -131,9 +140,9 @@ public class NFrame extends JFrame {
 		drawMindMap();
 	}
 
-	public void moveNode(Node n, int x, int y) {
+	public void moveNode(int nodeId, int x, int y) {
+		Node n = this.findNode(nodeId);
 		this.getContentPane().remove(n);
-		int nodeId = n.getId();
 		NVertex v = this.mindMapData.getVertex(nodeId);
 		v.modifyCoordinate(x, y);
 		int i = 0;
@@ -212,7 +221,7 @@ public class NFrame extends JFrame {
 				Node n = (Node) e.getSource();
 				if (selectedNode.getId() == n.getId())
 					return;
-				commend.commandAddArrow(MF, selectedNode, n);
+				command.commandAddArrow(MF, selectedNode.getId(), n.getId());
 				selectedNode = null;
 				eventnum = EDefault;
 			}
@@ -224,14 +233,14 @@ public class NFrame extends JFrame {
 				Node n = (Node) e.getSource();
 				if (selectedNode.getId() == n.getId())
 					return;
-				commend.commandRemoveArrow(MF, selectedNode, n);
+				command.commandRemoveArrow(MF, selectedNode.getId(), n.getId());
 				selectedNode = null;
 				eventnum = EDefault;
 			}
 
 			else if (eventnum == ERemoveNode) {
 				Node n = (Node) e.getSource();
-				commend.commandRemoveNode(MF, n);
+				command.commandRemoveNode(MF, n.getId());
 				eventnum = EDefault;
 			}
 
@@ -264,7 +273,7 @@ public class NFrame extends JFrame {
 				} else if (eventnum == EMoveNode) {
 					if (startP.x < menuWidth || selectedNode == null)
 						return;
-					commend.commandMoveNode(MF, selectedNode, startP.x, startP.y);
+					command.commandMoveNode(MF, selectedNode.getId(), startP.x, startP.y);
 					eventnum = EDefault;
 				}
 			}
@@ -360,7 +369,7 @@ public class NFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JButton b = (JButton) e.getSource();
 				if (b.getText().equals("Create")) {
-					commend.commandAddNode(PF, Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()),
+					command.commandAddNode(PF, Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()),
 							Integer.valueOf(Oheight.getText()));
 					dispose();
 					PF.eventnum = EDefault;
@@ -445,7 +454,7 @@ public class NFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JButton b = (JButton) e.getSource();
 				if (b.getText().equals("Confirm")) {
-					commend.commandEditNode(PF, N, Ocontents.getText(), Integer.valueOf(Owidth.getText()),
+					command.commandEditNode(PF, N.getId(), Ocontents.getText(), Integer.valueOf(Owidth.getText()),
 							Integer.valueOf(Oheight.getText()));
 					dispose();
 					PF.eventnum = EDefault;
