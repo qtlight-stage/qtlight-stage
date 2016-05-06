@@ -1,6 +1,6 @@
 package NMindMap;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class NMain {
 	static int frameWidth = 1000;
@@ -11,7 +11,7 @@ public class NMain {
 		NCommend C = new NCommend();
 		mainFrame.setMain(C);
 		mainFrame.setSize(frameWidth, frameHeight);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
 
 		// 아래부분에 네트워크 통신 부분 필요
