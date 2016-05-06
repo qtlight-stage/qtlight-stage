@@ -1,6 +1,6 @@
 package NMindMap;
-import javax.json.Json;
-import javax.json.JsonObject;
+
+import javax.json.*;
 import java.util.List;
 import java.util.LinkedList;
 
@@ -75,9 +75,21 @@ public class NData {
     }
 
     public JsonObject toJson() {
-        // TODO
-        return Json.createObjectBuilder()
-                .build();
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        JsonArrayBuilder vertices = Json.createArrayBuilder();
+        for (NVertex vertex : this.vertexList) {
+            vertices.add(vertex.toJson());
+        }
+        builder.add("vertices", vertices);
+
+        JsonArrayBuilder edges = Json.createArrayBuilder();
+        for (NEdge edge : this.edgeList) {
+            edges.add(edge.toJson());
+        }
+        builder.add("edges", edges);
+
+        return builder.build();
     }
 
 }
