@@ -11,7 +11,7 @@ public class NVertex {
 	private int Vy;
 	private int Vwidth;
 	private int Vheight;
-	private List<Integer> ConnectedVertex = new LinkedList<Integer>(); //store connected vertex id
+	private List<Integer> ConnectedVertex = new LinkedList<>(); //store connected vertex id
 
 	public void init(int id, String contents, int x, int y, int width, int height) {
 		this.Vid = id;
