@@ -28,12 +28,17 @@ public class SimpleSocketNetwork {
         }
     }
 
-    private static void handleChannel(final AsynchronousSocketChannel ch) throws ExecutionException, InterruptedException {
+    private static void handleChannel(final AsynchronousSocketChannel ch) throws InterruptedException {
         final ByteBuffer buffer = ByteBuffer.allocate(1024);
         final StringBuilder stringBuilder = new StringBuilder();
 
         while (ch.isOpen()) {
-            read(ch, buffer, stringBuilder);
+            try {
+                read(ch, buffer, stringBuilder);
+            }
+            catch (ExecutionException ex) {
+                break;
+            }
         }
     }
 
