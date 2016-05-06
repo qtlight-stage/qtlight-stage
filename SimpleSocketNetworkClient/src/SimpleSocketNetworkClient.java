@@ -4,6 +4,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Created by sasch on 5/5/2016.
@@ -16,7 +18,13 @@ public class SimpleSocketNetworkClient {
             public void completed(Void result, Void attachment) {
                 System.out.print("Connected to server\n");
 
-
+                try {
+                    handleChannel(ch);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -25,13 +33,11 @@ public class SimpleSocketNetworkClient {
             }
         });
 
-        handleChannel(ch);
-
         StringBuilder builder = new StringBuilder();
 
         while (true) {
             int read = System.in.read();
-            Character c = (char)read;
+            Character c = (char) read;
             builder.append(c);
 
             if (c.equals('\n')) {
@@ -53,54 +59,43 @@ public class SimpleSocketNetworkClient {
         }
     }
 
-    private static void handleChannel(final AsynchronousSocketChannel ch) {
+    private static void handleChannel(final AsynchronousSocketChannel ch) throws ExecutionException, InterruptedException {
         final ByteBuffer buffer = ByteBuffer.allocate(1024);
         final StringBuilder stringBuilder = new StringBuilder();
 
-        readContinuously(ch, buffer, stringBuilder);
+        while (ch.isOpen()) {
+            read(ch, buffer, stringBuilder);
+        }
     }
 
-    private static void readContinuously(AsynchronousSocketChannel ch, ByteBuffer buffer, StringBuilder stringBuilder) {
-        ch.read(buffer, buffer, new CompletionHandler<Integer, ByteBuffer>() {
-            public void completed(Integer bytesRead, ByteBuffer buffer) {
-                if (bytesRead == 0) {
-                    if (ch.isOpen()) {
-                        readContinuously(ch, buffer, stringBuilder);
-                    }
-                    return;
-                }
+    private static void read(AsynchronousSocketChannel ch, ByteBuffer buffer, StringBuilder stringBuilder) throws ExecutionException, InterruptedException {
+        Future<Integer> future = ch.read(buffer);
+        int bytesRead = future.get();
 
-                buffer.flip();
-                final String str = StandardCharsets.UTF_8.decode(buffer).toString();
-                buffer.flip();
-                System.out.print("Received partially: " + str + "\n");
-                final int newlineIndex = str.indexOf('\n');
-
-                if (newlineIndex == -1) {
-                    stringBuilder.append(str);
-                } else {
-                    stringBuilder.append(str.substring(0, newlineIndex));
-
-                    // new complete message has arrived, handle this!
-                    final String built = stringBuilder.toString();
-                    System.out.print("Received message: " + built + "\n");
-
-                    stringBuilder.setLength(0);
-                }
-
-                if (ch.isOpen()) {
-                    readContinuously(ch, buffer, stringBuilder);
-                }
+        if (bytesRead == 0) {
+            if (ch.isOpen()) {
+                read(ch, buffer, stringBuilder);
             }
+            return;
+        }
 
-            public void failed(Throwable exc, ByteBuffer attachment) {
-                try {
-                    ch.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        buffer.flip();
+        final String str = StandardCharsets.UTF_8.decode(buffer).toString();
+        buffer.flip();
+        System.out.print("Received partially: " + str + "\n");
+        final int newlineIndex = str.indexOf('\n');
+
+        if (newlineIndex == -1) {
+            stringBuilder.append(str);
+        } else {
+            stringBuilder.append(str.substring(0, newlineIndex));
+
+            // new complete message has arrived, handle this!
+            final String built = stringBuilder.toString();
+            System.out.print("Received message: " + built + "\n");
+
+            stringBuilder.setLength(0);
+        }
     }
 
 }
