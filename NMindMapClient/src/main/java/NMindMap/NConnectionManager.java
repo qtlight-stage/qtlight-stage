@@ -40,9 +40,6 @@ public class NConnectionManager {
         int bytesRead = future.get();
 
         if (bytesRead == 0) {
-            if (ch.isOpen()) {
-                read(ch, buffer, stringBuilder);
-            }
             return;
         }
 
