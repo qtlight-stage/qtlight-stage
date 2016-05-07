@@ -1,5 +1,7 @@
 package NMindMapServer;
 
+import jdk.management.resource.internal.inst.AsynchronousSocketChannelImplRMHooks;
+
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
@@ -12,13 +14,13 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * Created by sasch on 5/7/2016.
  */
-public class NConnectionManager {
-    public static void acceptConnection(Consumer<JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
+public class NServerConnectionManager {
+    public static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
         final AsynchronousServerSocketChannel listener =
                 AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
@@ -35,7 +37,7 @@ public class NConnectionManager {
         }
     }
 
-    private static void handleChannel(final AsynchronousSocketChannel ch, Consumer<JsonObject> onMessage) throws InterruptedException {
+    private static void handleChannel(final AsynchronousSocketChannel ch, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws InterruptedException {
         final ByteBuffer buffer = ByteBuffer.allocate(1024);
         final StringBuilder stringBuilder = new StringBuilder();
 
@@ -49,7 +51,7 @@ public class NConnectionManager {
         }
     }
 
-    private static void read(AsynchronousSocketChannel ch, ByteBuffer buffer, StringBuilder stringBuilder, Consumer<JsonObject> onMessage) throws ExecutionException, InterruptedException {
+    private static void read(AsynchronousSocketChannel ch, ByteBuffer buffer, StringBuilder stringBuilder, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws ExecutionException, InterruptedException {
         Future<Integer> future = ch.read(buffer);
         int bytesRead = future.get();
         if (bytesRead == 0) {
@@ -70,7 +72,7 @@ public class NConnectionManager {
             // new complete message has arrived, handle this!
             final String built = stringBuilder.toString();
             System.out.print("Received message: " + built + "\n");
-            onMessage.accept(parseJson(built));
+            onMessage.accept(ch, parseJson(built));
 
             stringBuilder.setLength(0);
         }
@@ -79,5 +81,9 @@ public class NConnectionManager {
     private static JsonObject parseJson(String str) {
         JsonReader reader = Json.createReader(new StringReader(str));
         return reader.readObject();
+    }
+
+    public static Future<Integer> sendJson(AsynchronousSocketChannel ch, JsonObject json) {
+        return ch.write(StandardCharsets.UTF_8.encode(json.toString() + "\n"));
     }
 }
