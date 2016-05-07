@@ -12,15 +12,17 @@ public class NMain {
     static NFrame mainFrame = new NFrame(frameWidth, frameHeight);
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
+        NConnectionManager.connectToServer(data -> {
+            System.out.print(data.toString());
+        });
+
         NCommandSender C = new NCommandSender();
+
         mainFrame.setMain(C);
         mainFrame.setSize(frameWidth, frameHeight);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);
 
-        NConnectionManager.connectToServer(data -> {
-            System.out.print(data.toString());
-        });
         NConnectionManager.sendJson(Json.createReader(new StringReader("{\"type\": \"refresh\"}")).readObject());
         // 아래부분에 네트워크 통신 부분 필요
         /*long start = System.currentTimeMillis();

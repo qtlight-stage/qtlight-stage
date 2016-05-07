@@ -1,18 +1,20 @@
 package NMindMap;
 
-import NMindMap.NFrame.Node;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 
 public class NCommandSender {
-    public void commandAddNode(NFrame f, String content, int x, int y, int width, int height) {
-        JsonObject vertexJson = this.generateNewVertexJsonObject(content, x, y, width, height);
-        f.addNode(content, x, y, width, height);
+    public NCommandSender() {
     }
 
-    private JsonObject generateNewVertexJsonObject(String content, int x, int y, int width, int height) {
+    public void commandAddNode(String content, int x, int y, int width, int height) {
+        JsonObject command = this.generateNewVertexCommand(content, x, y, width, height);
+        NConnectionManager.sendJson(command);
+    }
+
+    private JsonObject generateNewVertexCommand(String content, int x, int y, int width, int height) {
         return Json.createObjectBuilder()
+                .add("type", "add_node")
                 .add("content", content)
                 .add("x", x)
                 .add("y", y)
@@ -21,23 +23,50 @@ public class NCommandSender {
                 .build();
     }
 
-    public void commandRemoveNode(NFrame f, int nodeId) {
-        f.removeNode(nodeId);
+    public void commandRemoveNode(int nodeId) {
+        JsonObject command = Json.createObjectBuilder()
+                .add("type", "remove_node")
+                .add("id", nodeId)
+                .build();
+        NConnectionManager.sendJson(command);
     }
 
-    public void commandAddArrow(NFrame f, int startId, int endId) {
-        f.addArrow(startId, endId);
+    public void commandAddArrow(int startId, int endId) {
+        JsonObject command = Json.createObjectBuilder()
+                .add("type", "add_edge")
+                .add("start_id", startId)
+                .add("end_id", endId)
+                .build();
+        NConnectionManager.sendJson(command);
     }
 
-    public void commandRemoveArrow(NFrame f, int startId, int endId) {
-        f.removeArrow(startId, endId);
+    public void commandRemoveArrow(int startId, int endId) {
+        JsonObject command = Json.createObjectBuilder()
+                .add("type", "remove_edge")
+                .add("start_id", startId)
+                .add("end_id", endId)
+                .build();
+        NConnectionManager.sendJson(command);
     }
 
-    public void commandEditNode(NFrame f, int nodeId, String contents, int width, int height) {
-        f.editNode(nodeId, contents, width, height);
+    public void commandEditNode(int nodeId, String content, int width, int height) {
+        JsonObject command = Json.createObjectBuilder()
+                .add("type", "edit_node")
+                .add("id", nodeId)
+                .add("content", content)
+                .add("width", width)
+                .add("height", height)
+                .build();
+        NConnectionManager.sendJson(command);
     }
 
-    public void commandMoveNode(NFrame f, int nodeId, int x, int y) {
-        f.moveNode(nodeId, x, y);
+    public void commandMoveNode(int nodeId, int x, int y) {
+        JsonObject command = Json.createObjectBuilder()
+                .add("type", "move_node")
+                .add("id", nodeId)
+                .add("x", x)
+                .add("y", y)
+                .build();
+        NConnectionManager.sendJson(command);
     }
 }

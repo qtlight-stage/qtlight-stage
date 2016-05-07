@@ -221,7 +221,7 @@ public class NFrame extends JFrame {
 				Node n = (Node) e.getSource();
 				if (selectedNode.getId() == n.getId())
 					return;
-				command.commandAddArrow(MF, selectedNode.getId(), n.getId());
+				command.commandAddArrow(selectedNode.getId(), n.getId());
 				selectedNode = null;
 				eventnum = EDefault;
 			}
@@ -233,14 +233,14 @@ public class NFrame extends JFrame {
 				Node n = (Node) e.getSource();
 				if (selectedNode.getId() == n.getId())
 					return;
-				command.commandRemoveArrow(MF, selectedNode.getId(), n.getId());
+				command.commandRemoveArrow(selectedNode.getId(), n.getId());
 				selectedNode = null;
 				eventnum = EDefault;
 			}
 
 			else if (eventnum == ERemoveNode) {
 				Node n = (Node) e.getSource();
-				command.commandRemoveNode(MF, n.getId());
+				command.commandRemoveNode(n.getId());
 				eventnum = EDefault;
 			}
 
@@ -273,7 +273,7 @@ public class NFrame extends JFrame {
 				} else if (eventnum == EMoveNode) {
 					if (startP.x < menuWidth || selectedNode == null)
 						return;
-					command.commandMoveNode(MF, selectedNode.getId(), startP.x, startP.y);
+					command.commandMoveNode(selectedNode.getId(), startP.x, startP.y);
 					eventnum = EDefault;
 				}
 			}
@@ -369,7 +369,7 @@ public class NFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JButton b = (JButton) e.getSource();
 				if (b.getText().equals("Create")) {
-					command.commandAddNode(PF, Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()),
+					command.commandAddNode(Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()),
 							Integer.valueOf(Oheight.getText()));
 					dispose();
 					PF.eventnum = EDefault;
@@ -454,7 +454,7 @@ public class NFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JButton b = (JButton) e.getSource();
 				if (b.getText().equals("Confirm")) {
-					command.commandEditNode(PF, N.getId(), Ocontents.getText(), Integer.valueOf(Owidth.getText()),
+					command.commandEditNode(N.getId(), Ocontents.getText(), Integer.valueOf(Owidth.getText()),
 							Integer.valueOf(Oheight.getText()));
 					dispose();
 					PF.eventnum = EDefault;
