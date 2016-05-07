@@ -34,16 +34,16 @@ public class NConnectionManager {
             final ByteBuffer buffer = ByteBuffer.allocate(1024);
             final StringBuilder stringBuilder = new StringBuilder();
 
-            while (ch.isOpen()) {
-                try {
+            try {
+                while (ch.isOpen()) {
                     read(ch, buffer, stringBuilder, onMessage);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return;
         });
