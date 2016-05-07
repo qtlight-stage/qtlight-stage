@@ -80,10 +80,10 @@ public class NFrame extends JFrame {
 		return nodeList.get(i);
 	}
 	
-	public void addNode(String contents, int x, int y, int width, int height) {
-		int nodeId = this.mindMapData.createVertex(contents, x, y, width, height);
+	public void addNode(int nodeId, String content, int x, int y, int width, int height) {
+		this.mindMapData.createVertex(nodeId, content, x, y, width, height);
 		Node newNode = new Node(nodeId);
-		newNode.setText(contents);
+		newNode.setText(content);
 		newNode.setBounds(x, y, width, height);
 		newNode.setFocusPainted(false);
 		newNode.setContentAreaFilled(false);

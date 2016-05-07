@@ -7,7 +7,6 @@ import java.util.LinkedList;
 public class NData {
     private List<NVertex> vertexList = new LinkedList<NVertex>();
     private List<NEdge> edgeList = new LinkedList<NEdge>();
-    private int id = 0;
 
     public List<NVertex> getVertexList() {
         return this.vertexList;
@@ -27,11 +26,9 @@ public class NData {
         return null;
     }
 
-    public int createVertex(String contents, int x, int y, int width, int height) {
+    public void createVertex(int id, String contents, int x, int y, int width, int height) {
         NVertex new_vertex = new NVertex(id, contents, x, y, width, height);
         this.vertexList.add(new_vertex);
-        this.id++;
-        return new_vertex.id();
     }
 
     public void createEdge(int start, int end) {

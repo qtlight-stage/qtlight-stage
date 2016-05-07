@@ -6,16 +6,16 @@ import java.util.LinkedList;
 
 public class NVertex {
 	private int Vid;
-	private String Vcontents;
+	private String Vcontent;
 	private int Vx;
 	private int Vy;
 	private int Vwidth;
 	private int Vheight;
 	private List<Integer> ConnectedVertex = new LinkedList<>(); //store connected vertex id
 
-	public NVertex(int id, String contents, int x, int y, int width, int height) {
+	public NVertex(int id, String content, int x, int y, int width, int height) {
 		this.Vid = id;
-		this.Vcontents = contents;
+		this.Vcontent = content;
 		this.Vx = x;
 		this.Vy = y;
 		this.Vwidth = width;
@@ -42,7 +42,7 @@ public class NVertex {
 	}
 
 	public void modifyContents(String new_c){
-		this.Vcontents = new_c;
+		this.Vcontent = new_c;
 	}
 
 	public void modifyCoordinate(int new_x, int new_y){
@@ -56,7 +56,7 @@ public class NVertex {
 	}
 
 	public int id() {return this.Vid;}
-	public String contents() {return this.Vcontents;}
+	public String content() {return this.Vcontent;}
 	public int x() {return this.Vx;}
 	public int y() {return this.Vy;}
 	public int width() {return this.Vwidth;}
@@ -65,7 +65,7 @@ public class NVertex {
 	public JsonObject toJson() {
 		return Json.createObjectBuilder()
 				.add("id", this.Vid)
-				.add("content", this.Vcontents)
+				.add("content", this.Vcontent)
 				.add("x", this.Vx)
 				.add("y", this.Vy)
 				.add("width", this.Vwidth)

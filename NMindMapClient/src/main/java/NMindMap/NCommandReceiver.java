@@ -72,7 +72,7 @@ public class NCommandReceiver {
     }
 
     private void addNode(NFrame f, int id, String content, int x, int y, int width, int height) {
-        f.addNode(content, x, y, width, height);
+        f.addNode(id, content, x, y, width, height);
     }
 
     private void removeNode(NFrame f, int nodeId) {
