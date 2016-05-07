@@ -71,13 +71,12 @@ public class NFrame extends JFrame {
     }
 
     public Node findNode(int nodeId) {
-        int i = 0;
-        while (i < nodeList.size()) {
-            if (nodeList.get(i).getId() == nodeId)
-                break;
-            i++;
+        for (Node node : nodeList) {
+            if (node.getId() == nodeId) {
+                return node;
+            }
         }
-        return nodeList.get(i);
+        return null;
     }
 
     public void addNode(int nodeId, String content, int x, int y, int width, int height) {
@@ -122,17 +121,13 @@ public class NFrame extends JFrame {
         NVertex v = this.mindMapData.getVertex(nodeId);
         v.modifyContents(contents);
         v.modifySize(width, height);
-        int i = 0;
         List<NEdge> edgeList = this.mindMapData.getEdgeList();
-        NEdge e;
-        while (i < edgeList.size()) {
-            e = edgeList.get(i);
-            if (e.getStartId() == nodeId) {
-                e.modifyStart(v);
-            } else if (e.getEndId() == nodeId) {
-                e.modifyEnd(v);
+        for (NEdge edge : edgeList) {
+            if (edge.getStartId() == nodeId) {
+                edge.modifyStart(v);
+            } else if (edge.getEndId() == nodeId) {
+                edge.modifyEnd(v);
             }
-            i++;
         }
         n.setText(contents);
         n.setSize(width, height);
@@ -145,17 +140,13 @@ public class NFrame extends JFrame {
         this.getContentPane().remove(n);
         NVertex v = this.mindMapData.getVertex(nodeId);
         v.modifyCoordinate(x, y);
-        int i = 0;
         List<NEdge> edgeList = this.mindMapData.getEdgeList();
-        NEdge e;
-        while (i < edgeList.size()) {
-            e = edgeList.get(i);
-            if (e.getStartId() == nodeId) {
-                e.modifyStart(v);
-            } else if (e.getEndId() == nodeId) {
-                e.modifyEnd(v);
+        for (NEdge edge : edgeList) {
+            if (edge.getStartId() == nodeId) {
+                edge.modifyStart(v);
+            } else if (edge.getEndId() == nodeId) {
+                edge.modifyEnd(v);
             }
-            i++;
         }
         n.setLocation(x, y);
         this.getContentPane().add(n);
@@ -169,20 +160,13 @@ public class NFrame extends JFrame {
 
     public void drawMindMap() {
         clearMindMap();
-        int i = 0;
         Graphics g = this.getLayeredPane().getGraphics();
         List<NEdge> edgeList = this.mindMapData.getEdgeList();
-        while (i < edgeList.size()) {
-            g.drawLine(edgeList.get(i).getStartX(), edgeList.get(i).getStartY() + edgeHeight, edgeList.get(i).getEndX(),
-                    edgeList.get(i).getEndY() + edgeHeight);
-            i++;
+        for (NEdge edge : edgeList) {
+            g.drawLine(edge.getStartX(), edge.getStartY() + edgeHeight, edge.getEndX(),
+                    edge.getEndY() + edgeHeight);
         }
-        i = 0;
-        while (i < nodeList.size()) {
-            // nodeList.get(i).setText(String.valueOf(nodeList.get(i).getId()));
-            nodeList.get(i).updateUI();
-            i++;
-        }
+        nodeList.forEach(Node::updateUI);
     }
 
     private class MenuActionListener implements ActionListener {// butten event
