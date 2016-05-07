@@ -5,7 +5,7 @@ import NMindMap.NFrame.Node;
 import javax.json.Json;
 import javax.json.JsonObject;
 
-public class NCommand {
+public class NCommandSender {
     public void commandAddNode(NFrame f, String content, int x, int y, int width, int height) {
         JsonObject vertexJson = this.generateNewVertexJsonObject(content, x, y, width, height);
         f.addNode(content, x, y, width, height);

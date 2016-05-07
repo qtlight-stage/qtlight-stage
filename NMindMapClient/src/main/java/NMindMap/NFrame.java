@@ -30,7 +30,7 @@ public class NFrame extends JFrame {
 
 	private Node selectedNode = null;
 
-	private NCommand command;
+	private NCommandSender command;
 	private NFrame MF = this;
 
 	private NData mindMapData = new NData();
@@ -59,7 +59,7 @@ public class NFrame extends JFrame {
 		this.addMenuButton("Move Node", 0, 5 * menuHeight);
 	}
 
-	public void setMain(NCommand M) {
+	public void setMain(NCommandSender M) {
 		command = M;
 	}
 

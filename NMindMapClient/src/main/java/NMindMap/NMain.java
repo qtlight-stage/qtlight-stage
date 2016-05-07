@@ -12,7 +12,7 @@ public class NMain {
     static NFrame mainFrame = new NFrame(frameWidth, frameHeight);
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
-        NCommand C = new NCommand();
+        NCommandSender C = new NCommandSender();
         mainFrame.setMain(C);
         mainFrame.setSize(frameWidth, frameHeight);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
