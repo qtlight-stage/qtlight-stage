@@ -12,8 +12,11 @@ public class NMain {
     static NFrame mainFrame = new NFrame(frameWidth, frameHeight);
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
+        NCommandReceiver receiver = new NCommandReceiver();
+
         NConnectionManager.connectToServer(data -> {
             System.out.print(data.toString());
+            receiver.processCommand(mainFrame, data);
         });
 
         NCommandSender C = new NCommandSender();

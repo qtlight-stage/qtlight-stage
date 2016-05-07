@@ -14,7 +14,7 @@ public class NCommandSender {
 
     private JsonObject generateNewVertexCommand(String content, int x, int y, int width, int height) {
         return Json.createObjectBuilder()
-                .add("type", "add_node")
+                .add("type", "add_vertex")
                 .add("content", content)
                 .add("x", x)
                 .add("y", y)
@@ -25,7 +25,7 @@ public class NCommandSender {
 
     public void commandRemoveNode(int nodeId) {
         JsonObject command = Json.createObjectBuilder()
-                .add("type", "remove_node")
+                .add("type", "remove_vertex")
                 .add("id", nodeId)
                 .build();
         NConnectionManager.sendJson(command);
@@ -51,7 +51,7 @@ public class NCommandSender {
 
     public void commandEditNode(int nodeId, String content, int width, int height) {
         JsonObject command = Json.createObjectBuilder()
-                .add("type", "edit_node")
+                .add("type", "edit_vertex")
                 .add("id", nodeId)
                 .add("content", content)
                 .add("width", width)
@@ -62,7 +62,7 @@ public class NCommandSender {
 
     public void commandMoveNode(int nodeId, int x, int y) {
         JsonObject command = Json.createObjectBuilder()
-                .add("type", "move_node")
+                .add("type", "move_vertex")
                 .add("id", nodeId)
                 .add("x", x)
                 .add("y", y)

@@ -45,7 +45,7 @@ public class NServerDataManager {
             case "edit_vertex": {
                 return command;
             }
-            case "move_node": {
+            case "move_vertex": {
                 return command;
             }
             default:

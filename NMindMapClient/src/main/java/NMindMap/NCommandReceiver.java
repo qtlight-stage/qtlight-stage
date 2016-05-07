@@ -57,7 +57,7 @@ public class NCommandReceiver {
                 );
                 return;
             }
-            case "move_node": {
+            case "move_vertex": {
                 moveNode(
                         f,
                         command.getInt("id"),
