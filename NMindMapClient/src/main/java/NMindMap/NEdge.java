@@ -15,7 +15,7 @@ public class NEdge {
 	private int NendWidth;
 	private int NendHeight;
 
-	public void init (NVertex start, NVertex end){
+	public NEdge(NVertex start, NVertex end){
 		this.NstartId = start.id();
 		this.NstartX = start.x();
 		this.NstartY = start.y();

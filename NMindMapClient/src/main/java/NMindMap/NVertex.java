@@ -13,7 +13,7 @@ public class NVertex {
 	private int Vheight;
 	private List<Integer> ConnectedVertex = new LinkedList<>(); //store connected vertex id
 
-	public void init(int id, String contents, int x, int y, int width, int height) {
+	public NVertex(int id, String contents, int x, int y, int width, int height) {
 		this.Vid = id;
 		this.Vcontents = contents;
 		this.Vx = x;

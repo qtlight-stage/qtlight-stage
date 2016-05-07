@@ -28,8 +28,7 @@ public class NData {
     }
 
     public int createVertex(String contents, int x, int y, int width, int height) {
-        NVertex new_vertex = new NVertex();
-        new_vertex.init(id, contents, x, y, width, height);
+        NVertex new_vertex = new NVertex(id, contents, x, y, width, height);
         this.vertexList.add(new_vertex);
         this.id++;
         return new_vertex.id();
@@ -39,8 +38,7 @@ public class NData {
         removeEdge(start, end);
         NVertex Vstart = this.getVertex(start);
         NVertex Vend = this.getVertex(end);
-        NEdge new_connection = new NEdge();
-        new_connection.init(Vstart, Vend);
+        NEdge new_connection = new NEdge(Vstart, Vend);
         Vstart.makeConnection(end);
         Vend.makeConnection(start);
         this.edgeList.add(new_connection);
