@@ -19,9 +19,9 @@ public class NMain {
             receiver.processCommand(mainFrame, data);
         });
 
-        NCommandSender C = new NCommandSender();
+        NCommandSender sender = new NCommandSender();
 
-        mainFrame.setMain(C);
+        mainFrame.setMain(sender);
         mainFrame.setSize(frameWidth, frameHeight);
         mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainFrame.setVisible(true);

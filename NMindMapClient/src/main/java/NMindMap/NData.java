@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class NData {
-    private List<NVertex> vertexList = new LinkedList<NVertex>();
-    private List<NEdge> edgeList = new LinkedList<NEdge>();
+    private List<NVertex> vertexList = new LinkedList<>();
+    private List<NEdge> edgeList = new LinkedList<>();
 
     public List<NVertex> getVertexList() {
         return this.vertexList;
@@ -17,11 +17,9 @@ public class NData {
     }
 
     public NVertex getVertex(int vid) {
-        int i = 0;
-        while (i < vertexList.size()) {
-            if (vertexList.get(i).id() == vid)
-                return vertexList.get(i);
-            i++;
+        for (NVertex vertex : vertexList) {
+            if (vertex.id() == vid)
+                return vertex;
         }
         return null;
     }
@@ -48,10 +46,13 @@ public class NData {
         Vend.removeConnection(start);
         int i = 0;
         while (i < edgeList.size()) {
-            if (edgeList.get(i).getStartId() == start && edgeList.get(i).getEndId() == end) {
+            NEdge edge = edgeList.get(i);
+            int startId = edge.getStartId();
+            int endId = edge.getEndId();
+            if (startId == start && endId == end) {
                 edgeList.remove(i);
                 return;
-            } else if (edgeList.get(i).getStartId() == end && edgeList.get(i).getEndId() == start) {
+            } else if (startId == end && endId == start) {
                 edgeList.remove(i);
                 return;
             }
