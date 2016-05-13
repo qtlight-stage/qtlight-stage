@@ -41,11 +41,10 @@ public class NServerDataManager {
                     return command;
                 }
                 case "edit_vertex": {
-                    return command;
+                    return this.editVertex(command);
                 }
                 case "move_vertex": {
-                    this.moveVertex(command);
-                    return command;
+                    return this.moveVertex(command);
                 }
                 default:
                     return generateError("Unsupported type.", command);
@@ -90,6 +89,15 @@ public class NServerDataManager {
     }
 
     private JsonObject editVertex(JsonObject command) {
+        NServerVertex vertex = this.data.getVertex(command.getInt("id"));
+        vertex.modifyContent(command.getString("content"));
+        vertex.modifySize(command.getInt("width"), command.getInt("height"));
+        return command;
+    }
 
+    private JsonObject moveVertex(JsonObject command) {
+        NServerVertex vertex = this.data.getVertex(command.getInt("id"));
+        vertex.modifyCoordinate(command.getInt("x"), command.getInt("y"));
+        return command;
     }
 }

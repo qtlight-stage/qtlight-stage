@@ -41,7 +41,7 @@ public class NServerVertex {
 		return this.ConnectedVertex;
 	}
 
-	public void modifyContents(String new_c){
+	public void modifyContent(String new_c){
 		this.Vcontent = new_c;
 	}
 
