@@ -95,13 +95,17 @@ public class NFrame extends JFrame {
     public void removeNode(int nodeId) {
         this.mindMapData.removeVertex(nodeId);
         int i = 0;
+        Node node = null;
         while (i < nodeList.size()) {
-            if (nodeList.get(i).getId() == nodeId)
+            node = nodeList.get(i);
+            if (node.getId() == nodeId)
                 break;
             i++;
         }
-        getContentPane().remove(nodeList.get(i));
-        nodeList.remove(i);
+        if (node != null) {
+            getContentPane().remove(node);
+            nodeList.remove(i);
+        }
         drawMindMap();
     }
 

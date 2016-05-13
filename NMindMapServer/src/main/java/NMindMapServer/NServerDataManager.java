@@ -17,39 +17,42 @@ public class NServerDataManager {
         if (!command.containsKey("type")) {
             return generateError("Required 'type' field is not found.", command);
         }
-        switch (command.getString("type")) {
-            case "refresh": {
-                return Json.createObjectBuilder()
-                        .add("type", "refresh")
-                        .add("data", data.toJson())
-                        .build();
+        try {
+            switch (command.getString("type")) {
+                case "refresh": {
+                    return Json.createObjectBuilder()
+                            .add("type", "refresh")
+                            .add("data", data.toJson())
+                            .build();
+                }
+                case "add_vertex": {
+                    return this.addVertex(command);
+                }
+                case "remove_vertex": {
+                    this.data.removeVertex(command.getInt("id"));
+                    return command;
+                }
+                case "add_edge": {
+                    this.data.createEdge(command.getInt("start_id"), command.getInt("end_id"));
+                    return command;
+                }
+                case "remove_edge": {
+                    this.data.removeEdge(command.getInt("start_id"), command.getInt("end_id"));
+                    return command;
+                }
+                case "edit_vertex": {
+                    return command;
+                }
+                case "move_vertex": {
+                    this.moveVertex(command);
+                    return command;
+                }
+                default:
+                    return generateError("Unsupported type.", command);
             }
-            case "add_vertex": {
-                lastId++;
-                return jsonObjectToBuilder(command)
-                        .add("id", lastId)
-                        .build();
-            }
-            case "remove_vertex": {
-                return command;
-            }
-            case "add_edge": {
-                lastId++;
-                return jsonObjectToBuilder(command)
-                        .add("id", lastId)
-                        .build();
-            }
-            case "remove_edge": {
-                return command;
-            }
-            case "edit_vertex": {
-                return command;
-            }
-            case "move_vertex": {
-                return command;
-            }
-            default:
-                return generateError("Unsupported type.", command);
+        }
+        catch (Exception e) {
+            return generateError("Data error:\r\n" + e.getMessage(), command);
         }
     }
 
@@ -71,6 +74,22 @@ public class NServerDataManager {
         return job;
     }
 
-    public NServerDataManager() {
+    private JsonObject addVertex(JsonObject command) {
+        lastId++;
+        this.data.createVertex(
+                lastId,
+                command.getString("content"),
+                command.getInt("x"),
+                command.getInt("y"),
+                command.getInt("width"),
+                command.getInt("height")
+        );
+        return jsonObjectToBuilder(command)
+                .add("id", lastId)
+                .build();
+    }
+
+    private JsonObject editVertex(JsonObject command) {
+
     }
 }
