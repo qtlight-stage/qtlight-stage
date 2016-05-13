@@ -41,7 +41,7 @@ public class NVertex {
 		return this.ConnectedVertex;
 	}
 
-	public void modifyContents(String new_c){
+	public void modifyContent(String new_c){
 		this.Vcontent = new_c;
 	}
 
@@ -61,15 +61,4 @@ public class NVertex {
 	public int y() {return this.Vy;}
 	public int width() {return this.Vwidth;}
 	public int height() {return this.Vheight;}
-
-	public JsonObject toJson() {
-		return Json.createObjectBuilder()
-				.add("id", this.Vid)
-				.add("content", this.Vcontent)
-				.add("x", this.Vx)
-				.add("y", this.Vy)
-				.add("width", this.Vwidth)
-				.add("height", this.Vheight)
-				.build();
-	}
 }

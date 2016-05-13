@@ -123,9 +123,9 @@ public class NFrame extends JFrame {
         Node n = this.findNode(nodeId);
         this.getContentPane().remove(n);
         NVertex v = this.mindMapData.getVertex(nodeId);
-        v.modifyContents(contents);
+        v.modifyContent(contents);
         v.modifySize(width, height);
-        List<NEdge> edgeList = this.mindMapData.getEdgeList();
+        List<NEdge> edgeList = this.mindMapData.edgeList;
         for (NEdge edge : edgeList) {
             if (edge.getStartId() == nodeId) {
                 edge.modifyStart(v);
@@ -144,7 +144,7 @@ public class NFrame extends JFrame {
         this.getContentPane().remove(n);
         NVertex v = this.mindMapData.getVertex(nodeId);
         v.modifyCoordinate(x, y);
-        List<NEdge> edgeList = this.mindMapData.getEdgeList();
+        List<NEdge> edgeList = this.mindMapData.edgeList;
         for (NEdge edge : edgeList) {
             if (edge.getStartId() == nodeId) {
                 edge.modifyStart(v);
@@ -165,7 +165,7 @@ public class NFrame extends JFrame {
     public void drawMindMap() {
         clearMindMap();
         Graphics g = this.getLayeredPane().getGraphics();
-        List<NEdge> edgeList = this.mindMapData.getEdgeList();
+        List<NEdge> edgeList = this.mindMapData.edgeList;
         for (NEdge edge : edgeList) {
             g.drawLine(edge.getStartX(), edge.getStartY() + edgeHeight, edge.getEndX(),
                     edge.getEndY() + edgeHeight);

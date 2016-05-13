@@ -52,11 +52,4 @@ public class NEdge {
 	public int getStartY(){return this.NstartY + (this.NstartHeight / 2);}
 	public int getEndX(){return this.NendX + (this.NendWidth / 2);}
 	public int getEndY(){return this.NendY + (this.NendHeight / 2);}
-
-	public JsonObject toJson() {
-		return Json.createObjectBuilder()
-				.add("start_vertex", this.NstartId)
-				.add("end_vertex", this.NendId)
-				.build();
-	}
 }

@@ -5,16 +5,8 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class NData {
-    private List<NVertex> vertexList = new LinkedList<>();
-    private List<NEdge> edgeList = new LinkedList<>();
-
-    public List<NVertex> getVertexList() {
-        return this.vertexList;
-    }
-
-    public List<NEdge> getEdgeList() {
-        return this.edgeList;
-    }
+    public final List<NVertex> vertexList = new LinkedList<>();
+    public final List<NEdge> edgeList = new LinkedList<>();
 
     public NVertex getVertex(int vid) {
         for (NVertex vertex : vertexList) {
@@ -70,22 +62,36 @@ public class NData {
         vertexList.remove(V);
     }
 
-    public JsonObject toJson() {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
+    private static NData fromJson(JsonObject json) {
+        NData data = new NData();
+        JsonArray vertices = json.getJsonArray("vertices");
+        JsonArray edges = json.getJsonArray("edges");
 
-        JsonArrayBuilder vertices = Json.createArrayBuilder();
-        for (NVertex vertex : this.vertexList) {
-            vertices.add(vertex.toJson());
+        for (JsonValue vertexJsonValue : vertices) {
+            createVertexFromJson(data, (JsonObject)vertexJsonValue);
         }
-        builder.add("vertices", vertices);
-
-        JsonArrayBuilder edges = Json.createArrayBuilder();
-        for (NEdge edge : this.edgeList) {
-            edges.add(edge.toJson());
+        for (JsonValue edgeJsonValue : vertices) {;
+            createEdgeFromJson(data, (JsonObject)edgeJsonValue);
         }
-        builder.add("edges", edges);
 
-        return builder.build();
+        return data;
     }
 
+    private static void createVertexFromJson(NData data, JsonObject json) {
+        data.createVertex(
+                json.getInt("id"),
+                json.getString("content"),
+                json.getInt("x"),
+                json.getInt("y"),
+                json.getInt("width"),
+                json.getInt("height")
+        );
+    }
+
+    private static void createEdgeFromJson(NData data, JsonObject json) {
+        data.createEdge(
+                json.getInt("start_vertex"),
+                json.getInt("end_vertex")
+        );
+    }
 }
