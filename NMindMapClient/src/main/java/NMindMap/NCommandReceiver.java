@@ -13,6 +13,7 @@ public class NCommandReceiver {
         }
         switch (command.getString("type")) {
             case "refresh": {
+                f.setData(NData.fromJson(command.getJsonObject("data")));
                 return;
             }
             case "add_vertex": {

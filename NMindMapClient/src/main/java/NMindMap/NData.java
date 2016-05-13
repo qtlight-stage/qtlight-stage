@@ -62,7 +62,7 @@ public class NData {
         vertexList.remove(V);
     }
 
-    private static NData fromJson(JsonObject json) {
+    public static NData fromJson(JsonObject json) {
         NData data = new NData();
         JsonArray vertices = json.getJsonArray("vertices");
         JsonArray edges = json.getJsonArray("edges");
@@ -70,7 +70,7 @@ public class NData {
         for (JsonValue vertexJsonValue : vertices) {
             createVertexFromJson(data, (JsonObject)vertexJsonValue);
         }
-        for (JsonValue edgeJsonValue : vertices) {;
+        for (JsonValue edgeJsonValue : edges) {
             createEdgeFromJson(data, (JsonObject)edgeJsonValue);
         }
 

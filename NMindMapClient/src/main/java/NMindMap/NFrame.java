@@ -34,7 +34,7 @@ public class NFrame extends JFrame {
     private NFrame MF = this;
 
     private NData mindMapData = new NData();
-    private List<Node> nodeList = new LinkedList<Node>();
+    private List<Node> nodeList = new LinkedList<>();
 
     public NFrame(int width, int height) {
         setTitle("NMindMap");
@@ -57,6 +57,13 @@ public class NFrame extends JFrame {
         this.addMenuButton("Remove Arrow", 0, 3 * menuHeight);
         this.addMenuButton("Edit Node", 0, 4 * menuHeight);
         this.addMenuButton("Move Node", 0, 5 * menuHeight);
+    }
+
+    public void setData(NData newData) {
+        this.mindMapData = newData;
+        this.nodeList = new LinkedList<>();
+        this.mindMapData.vertexList.forEach(this::addNodeFromVertex);
+        drawMindMap();
     }
 
     public void setMain(NCommandSender M) {
@@ -84,6 +91,18 @@ public class NFrame extends JFrame {
         Node newNode = new Node(nodeId);
         newNode.setText(content);
         newNode.setBounds(x, y, width, height);
+        newNode.setFocusPainted(false);
+        newNode.setContentAreaFilled(false);
+        newNode.addActionListener(new NodeActionListener());
+        nodeList.add(newNode);
+        this.getContentPane().add(newNode);
+        newNode.updateUI();
+    }
+
+    public void addNodeFromVertex(NVertex vertex) {
+        Node newNode = new Node(vertex.id());
+        newNode.setText(vertex.content());
+        newNode.setBounds(vertex.x(), vertex.y(), vertex.width(), vertex.height());
         newNode.setFocusPainted(false);
         newNode.setContentAreaFilled(false);
         newNode.addActionListener(new NodeActionListener());
