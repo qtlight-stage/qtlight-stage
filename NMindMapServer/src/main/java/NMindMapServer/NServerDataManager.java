@@ -10,7 +10,7 @@ import java.util.Map;
  * Created by sasch on 5/7/2016.
  */
 public class NServerDataManager {
-    private JsonObject data = Json.createObjectBuilder().build();
+    private NServerData data = new NServerData();
     private int lastId = -1;
 
     public JsonObject processCommand(JsonObject command) {
@@ -21,7 +21,7 @@ public class NServerDataManager {
             case "refresh": {
                 return Json.createObjectBuilder()
                         .add("type", "refresh")
-                        .add("data", data)
+                        .add("data", data.toJson())
                         .build();
             }
             case "add_vertex": {
