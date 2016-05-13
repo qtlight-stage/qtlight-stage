@@ -3,6 +3,8 @@
 **/.metadata/
 **/.idea/workspace.xml
 
+NMindMapServer/data.json
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

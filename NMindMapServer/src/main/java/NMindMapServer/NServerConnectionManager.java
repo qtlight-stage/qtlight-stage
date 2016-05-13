@@ -11,6 +11,8 @@ import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
 
@@ -18,21 +20,25 @@ import java.util.function.BiConsumer;
  * Created by sasch on 5/7/2016.
  */
 public class NServerConnectionManager {
+    private static final ExecutorService pool = Executors.newFixedThreadPool(10);
+
     public static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
         final AsynchronousServerSocketChannel listener =
                 AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
         System.out.print("Waiting new connection...");
 
-        Future<AsynchronousSocketChannel> future;
-        while (true) {
-            future = listener.accept();
-            AsynchronousSocketChannel ch = future.get();
-            System.out.print("Connected\n");
+        pool.submit(() -> {
+            Future<AsynchronousSocketChannel> future;
+            while (true) {
+                future = listener.accept();
+                AsynchronousSocketChannel ch = future.get();
+                System.out.print("Connected\n");
 
-            // handle this connection
-            handleChannel(ch, onMessage);
-        }
+                // handle this connection
+                handleChannel(ch, onMessage);
+            }
+        });
     }
 
     private static void handleChannel(final AsynchronousSocketChannel ch, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws InterruptedException {

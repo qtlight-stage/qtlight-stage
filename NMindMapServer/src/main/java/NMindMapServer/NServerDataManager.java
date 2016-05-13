@@ -10,8 +10,12 @@ import java.util.Map;
  * Created by sasch on 5/7/2016.
  */
 public class NServerDataManager {
-    private NServerData data = new NServerData();
+    private NServerData data;
     private int lastId = -1;
+
+    public NServerDataManager(NServerData data) {
+        this.data = data;
+    }
 
     public JsonObject processCommand(JsonObject command) {
         if (!command.containsKey("type")) {

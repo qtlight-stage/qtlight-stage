@@ -5,16 +5,8 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class NServerData {
-    private List<NServerVertex> vertexList = new LinkedList<>();
-    private List<NServerEdge> edgeList = new LinkedList<>();
-
-    public List<NServerVertex> getVertexList() {
-        return this.vertexList;
-    }
-
-    public List<NServerEdge> getEdgeList() {
-        return this.edgeList;
-    }
+    public final List<NServerVertex> vertexList = new LinkedList<>();
+    public final List<NServerEdge> edgeList = new LinkedList<>();
 
     public NServerVertex getVertex(int vid) {
         for (NServerVertex vertex : vertexList) {
@@ -68,6 +60,41 @@ public class NServerData {
             this.removeEdge(vid, connected_vid);
         }
         vertexList.remove(V);
+    }
+
+
+
+    public static NServerData fromJson(JsonObject json) {
+        NServerData data = new NServerData();
+        JsonArray vertices = json.getJsonArray("vertices");
+        JsonArray edges = json.getJsonArray("edges");
+
+        for (JsonValue vertexJsonValue : vertices) {
+            createVertexFromJson(data, (JsonObject)vertexJsonValue);
+        }
+        for (JsonValue edgeJsonValue : edges) {
+            createEdgeFromJson(data, (JsonObject)edgeJsonValue);
+        }
+
+        return data;
+    }
+
+    private static void createVertexFromJson(NServerData data, JsonObject json) {
+        data.createVertex(
+                json.getInt("id"),
+                json.getString("content"),
+                json.getInt("x"),
+                json.getInt("y"),
+                json.getInt("width"),
+                json.getInt("height")
+        );
+    }
+
+    private static void createEdgeFromJson(NServerData data, JsonObject json) {
+        data.createEdge(
+                json.getInt("start_vertex"),
+                json.getInt("end_vertex")
+        );
     }
 
     public JsonObject toJson() {
