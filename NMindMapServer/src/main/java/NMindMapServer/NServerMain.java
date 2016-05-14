@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -26,11 +29,17 @@ public class NServerMain {
         }
         NServerDataManager dataManager = new NServerDataManager(data);
 
+        List<AsynchronousSocketChannel> list = new LinkedList<>();
         NServerConnectionManager.acceptConnection((AsynchronousSocketChannel channel, JsonObject json) -> {
+            if (!list.contains(channel)) {
+                list.add(channel);
+            }
             System.out.print(json.toString());
             JsonObject result = dataManager.processCommand(json);
             if (result != null) {
-                NServerConnectionManager.sendJson(channel, result);
+                for (AsynchronousSocketChannel ch : list) {
+                    NServerConnectionManager.sendJson(ch, result);
+                }
             }
         });
 
