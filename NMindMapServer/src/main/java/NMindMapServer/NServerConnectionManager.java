@@ -22,7 +22,7 @@ import java.util.function.BiConsumer;
 public class NServerConnectionManager {
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
-    public static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
+    public static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException {
         final AsynchronousServerSocketChannel listener =
                 AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
@@ -41,18 +41,21 @@ public class NServerConnectionManager {
         });
     }
 
-    private static void handleChannel(final AsynchronousSocketChannel ch, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws InterruptedException {
-        final ByteBuffer buffer = ByteBuffer.allocate(1024);
-        final StringBuilder stringBuilder = new StringBuilder();
+    private static void handleChannel(final AsynchronousSocketChannel ch, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) {
+        pool.submit(() -> {
+            final ByteBuffer buffer = ByteBuffer.allocate(1024);
+            final StringBuilder stringBuilder = new StringBuilder();
 
-        while (ch.isOpen()) {
-            try {
-                read(ch, buffer, stringBuilder, onMessage);
+            while (ch.isOpen()) {
+                try {
+                    read(ch, buffer, stringBuilder, onMessage);
+                } catch (ExecutionException ex) {
+                    break;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-            catch (ExecutionException ex) {
-                break;
-            }
-        }
+        });
     }
 
     private static void read(AsynchronousSocketChannel ch, ByteBuffer buffer, StringBuilder stringBuilder, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws ExecutionException, InterruptedException {
