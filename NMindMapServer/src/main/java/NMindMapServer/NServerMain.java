@@ -2,10 +2,8 @@ package NMindMapServer;
 
 import net.maritimecloud.internal.core.javax.json.JsonObject;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
