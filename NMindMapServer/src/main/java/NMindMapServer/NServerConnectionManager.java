@@ -1,8 +1,8 @@
 package NMindMapServer;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import net.maritimecloud.internal.core.javax.json.Json;
+import net.maritimecloud.internal.core.javax.json.JsonObject;
+import net.maritimecloud.internal.core.javax.json.JsonReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.InetSocketAddress;

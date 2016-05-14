@@ -1,6 +1,6 @@
 package NMindMapServer;
 
-import javax.json.JsonObject;
+import net.maritimecloud.internal.core.javax.json.JsonObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

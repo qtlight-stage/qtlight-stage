@@ -1,6 +1,6 @@
 package NMindMap;
 
-import javax.json.Json;
+import net.maritimecloud.internal.core.javax.json.Json;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.StringReader;

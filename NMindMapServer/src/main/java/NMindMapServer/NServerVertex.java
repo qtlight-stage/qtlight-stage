@@ -1,6 +1,6 @@
 package NMindMapServer;
-import javax.json.Json;
-import javax.json.JsonObject;
+import net.maritimecloud.internal.core.javax.json.Json;
+import net.maritimecloud.internal.core.javax.json.JsonObject;
 import java.util.List;
 import java.util.LinkedList;
 
