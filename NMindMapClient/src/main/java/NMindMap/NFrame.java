@@ -117,15 +117,17 @@ public class NFrame extends JFrame {
         Node node = null;
         while (i < nodeList.size()) {
             node = nodeList.get(i);
-            if (node.getId() == nodeId)
+            if (node.getId() == nodeId) {
+                getContentPane().remove(node);
+                nodeList.remove(i);
                 break;
+            }
             i++;
         }
+        drawMindMap();
         if (node != null) {
             getContentPane().remove(node);
-            nodeList.remove(i);
         }
-        drawMindMap();
     }
 
     public void addArrow(int startId, int endId) {
@@ -245,6 +247,7 @@ public class NFrame extends JFrame {
                 eventnum = EDefault;
             } else if (eventnum == ERemoveNode) {
                 Node n = (Node) e.getSource();
+                //removeNode(n.getId());
                 command.commandRemoveNode(n.getId());
                 eventnum = EDefault;
             } else if (eventnum == EEditNode) {
@@ -372,6 +375,8 @@ public class NFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JButton b = (JButton) e.getSource();
                 if (b.getText().equals("Create")) {
+                    //MF.addNode(1,Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()),
+                    //                Integer.valueOf(Oheight.getText()));
                     command.commandAddNode(Ocontents.getText(), P.x, P.y, Integer.valueOf(Owidth.getText()),
                             Integer.valueOf(Oheight.getText()));
                     dispose();
