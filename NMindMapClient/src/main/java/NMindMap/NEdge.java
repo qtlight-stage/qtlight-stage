@@ -1,8 +1,5 @@
 package NMindMap;
 
-import net.maritimecloud.internal.core.javax.json.Json;
-import net.maritimecloud.internal.core.javax.json.JsonObject;
-
 public class NEdge {
 	private int NstartId;
 	private int NendId;

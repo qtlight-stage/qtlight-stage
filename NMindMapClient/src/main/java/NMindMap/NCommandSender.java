@@ -1,7 +1,7 @@
 package NMindMap;
 
-import net.maritimecloud.internal.core.javax.json.Json;
-import net.maritimecloud.internal.core.javax.json.JsonObject;
+import javax.json.Json;
+import javax.json.JsonObject;
 
 public class NCommandSender {
     public void commandAddNode(String content, int x, int y, int width, int height) {

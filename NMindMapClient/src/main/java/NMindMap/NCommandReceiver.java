@@ -1,6 +1,6 @@
 package NMindMap;
 
-import net.maritimecloud.internal.core.javax.json.JsonObject;
+import javax.json.JsonObject;
 
 /**
  * Created by sasch on 5/7/2016.
