@@ -38,7 +38,7 @@ public class NFrame extends JFrame {
     private List<Node> nodeList = new LinkedList<>();
 
     private JButton setIpButton = this.createMenuButton("Set IP", 0, 0);
-    private JTextPane setIpText = this.createTextPaneButton(0, menuHeight);
+    private JTextPane setIpText = this.createTextPaneButton("localhost", 0, menuHeight);
     private JButton createNodeButton = this.createMenuButton("Create Node", 0, 2 * menuHeight);
     private JButton removeNodeButton = this.createMenuButton("Remove Node", 0, 3 * menuHeight);
     private JButton createArrowButton = this.createMenuButton("Create Arrow", 0, 4 * menuHeight);
@@ -47,12 +47,13 @@ public class NFrame extends JFrame {
     private JButton moveNodeButton = this.createMenuButton("Move Node", 0, 7 * menuHeight);
     private Consumer<String> onSetIp;
 
+    private MindMapPanel panel = new MindMapPanel();;
+
     public NFrame(int width, int height) {
         setTitle("NMindMap");
         Fwidth = width;
         Fheight = height;
 
-        MindMapPanel panel = new MindMapPanel();
         setContentPane(panel);
 
         JMenuBar menuBar = new JMenuBar();
@@ -78,7 +79,10 @@ public class NFrame extends JFrame {
 
     public void setData(NData newData) {
         this.mindMapData = newData;
-        this.nodeList = new LinkedList<>();
+        for (Node node : this.nodeList) {
+            panel.remove(node);
+        }
+        this.nodeList.clear();
         this.mindMapData.vertexList.forEach(this::addNodeFromVertex);
         drawMindMap();
     }
@@ -87,8 +91,9 @@ public class NFrame extends JFrame {
         command = M;
     }
 
-    private JTextPane createTextPaneButton(int x, int y) {
+    private JTextPane createTextPaneButton(String content, int x, int y) {
         JTextPane pane = new JTextPane();
+        pane.setText(content);
         pane.setBounds(x, y, menuWidth, menuHeight);
         return pane;
     }
@@ -235,8 +240,6 @@ public class NFrame extends JFrame {
             JButton b = (JButton) e.getSource();
             if (b == setIpButton && !setIpText.equals("")) {
                 onSetIp.accept(setIpText.getText());
-                setIpButton.setEnabled(false);
-                setIpText.setEnabled(false);
                 setControlButtonsEnable(true);
             } else if (b.getText().equals("Create Node")) {
                 eventnum = ECreateNode;
