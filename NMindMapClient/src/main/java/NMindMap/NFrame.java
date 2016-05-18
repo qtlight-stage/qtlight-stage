@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 import java.util.LinkedList;
+import java.util.function.Consumer;
 
 public class NFrame extends JFrame {
     public int eventnum = 0;
@@ -36,12 +37,23 @@ public class NFrame extends JFrame {
     private NData mindMapData = new NData();
     private List<Node> nodeList = new LinkedList<>();
 
+    private JButton setIpButton = this.createMenuButton("Set IP", 0, 0);
+    private JTextPane setIpText = this.createTextPaneButton(0, menuHeight);
+    private JButton createNodeButton = this.createMenuButton("Create Node", 0, 2 * menuHeight);
+    private JButton removeNodeButton = this.createMenuButton("Remove Node", 0, 3 * menuHeight);
+    private JButton createArrowButton = this.createMenuButton("Create Arrow", 0, 4 * menuHeight);
+    private JButton removeArrowButton = this.createMenuButton("Remove Arrow", 0, 5 * menuHeight);
+    private JButton editNodeButton = this.createMenuButton("Edit Node", 0, 6 * menuHeight);
+    private JButton moveNodeButton = this.createMenuButton("Move Node", 0, 7 * menuHeight);
+    private Consumer<String> onSetIp;
+
     public NFrame(int width, int height) {
         setTitle("NMindMap");
         Fwidth = width;
         Fheight = height;
 
-        setContentPane(new MindMapPanel());
+        MindMapPanel panel = new MindMapPanel();
+        setContentPane(panel);
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
@@ -49,12 +61,19 @@ public class NFrame extends JFrame {
         menuBar.add(mnMenu);
         getContentPane().setLayout(null);
 
-        this.addMenuButton("Create Node", 0, 0);
-        this.addMenuButton("Remove Node", 0, menuHeight);
-        this.addMenuButton("Create Arrow", 0, 2 * menuHeight);
-        this.addMenuButton("Remove Arrow", 0, 3 * menuHeight);
-        this.addMenuButton("Edit Node", 0, 4 * menuHeight);
-        this.addMenuButton("Move Node", 0, 5 * menuHeight);
+        setControlButtonsEnable(false);
+        panel.add(setIpButton);
+        panel.add(setIpText);
+        panel.add(createNodeButton);
+        panel.add(removeNodeButton);
+        panel.add(createArrowButton);
+        panel.add(removeArrowButton);
+        panel.add(editNodeButton);
+        panel.add(moveNodeButton);
+    }
+
+    public void listenSetIp(Consumer<String> onSetIp) {
+        this.onSetIp = onSetIp;
     }
 
     public void setData(NData newData) {
@@ -68,11 +87,27 @@ public class NFrame extends JFrame {
         command = M;
     }
 
-    public void addMenuButton(String name, int x, int y) {
+    private JTextPane createTextPaneButton(int x, int y) {
+        JTextPane pane = new JTextPane();
+        pane.setBounds(x, y, menuWidth, menuHeight);
+        return pane;
+    }
+
+    private JButton createMenuButton(String name, int x, int y) {
         JButton newButton = new JButton(name);
         newButton.setBounds(x, y, menuWidth, menuHeight);
         newButton.addActionListener(new MenuActionListener());
-        this.getContentPane().add(newButton);
+        return newButton;
+    }
+
+    private void setEnables(Boolean enable, Component... components) {
+        for (Component component : components) {
+            component.setEnabled(enable);
+        }
+    }
+
+    private void setControlButtonsEnable(Boolean enable) {
+        setEnables(enable, createNodeButton, removeNodeButton, createArrowButton, removeArrowButton, editNodeButton, moveNodeButton);
     }
 
     public Node findNode(int nodeId) {
@@ -198,7 +233,12 @@ public class NFrame extends JFrame {
             if (eventnum == EOption)
                 return;
             JButton b = (JButton) e.getSource();
-            if (b.getText().equals("Create Node")) {
+            if (b == setIpButton && !setIpText.equals("")) {
+                onSetIp.accept(setIpText.getText());
+                setIpButton.setEnabled(false);
+                setIpText.setEnabled(false);
+                setControlButtonsEnable(true);
+            } else if (b.getText().equals("Create Node")) {
                 eventnum = ECreateNode;
                 selectedNode = null;
             } else if (b.getText().equals("Remove Node")) {
