@@ -16,12 +16,13 @@ public class NServerData {
         return null;
     }
 
-    public void createVertex(int id, String contents, int x, int y, int width, int height) {
+    public NServerVertex createVertex(int id, String contents, int x, int y, int width, int height) {
         NServerVertex new_vertex = new NServerVertex(id, contents, x, y, width, height);
         this.vertexList.add(new_vertex);
+        return new_vertex;
     }
 
-    public void createEdge(int start, int end) {
+    public NServerEdge createEdge(int start, int end) {
         removeEdge(start, end);
         NServerVertex Vstart = this.getVertex(start);
         NServerVertex Vend = this.getVertex(end);
@@ -29,6 +30,7 @@ public class NServerData {
         Vstart.makeConnection(end);
         Vend.makeConnection(start);
         this.edgeList.add(new_connection);
+        return new_connection;
     }
 
     public void removeEdge(int start, int end) {
@@ -62,7 +64,16 @@ public class NServerData {
         vertexList.remove(V);
     }
 
-
+    public int getHighestId() {
+        int max = 0;
+        for (NServerVertex vertex : this.vertexList) {
+            int id = vertex.id();
+            if (id > max) {
+                max = id;
+            }
+        }
+        return max;
+    }
 
     public static NServerData fromJson(JsonObject json) {
         NServerData data = new NServerData();
@@ -79,8 +90,8 @@ public class NServerData {
         return data;
     }
 
-    private static void createVertexFromJson(NServerData data, JsonObject json) {
-        data.createVertex(
+    private static NServerVertex createVertexFromJson(NServerData data, JsonObject json) {
+        return data.createVertex(
                 json.getInt("id"),
                 json.getString("content"),
                 json.getInt("x"),
@@ -90,8 +101,8 @@ public class NServerData {
         );
     }
 
-    private static void createEdgeFromJson(NServerData data, JsonObject json) {
-        data.createEdge(
+    private static NServerEdge createEdgeFromJson(NServerData data, JsonObject json) {
+        return data.createEdge(
                 json.getInt("start_vertex"),
                 json.getInt("end_vertex")
         );

@@ -15,6 +15,7 @@ public class NServerDataManager {
 
     public NServerDataManager(NServerData data) {
         this.data = data;
+        lastId = this.data.getHighestId();
     }
 
     public JsonObject processCommand(JsonObject command) {

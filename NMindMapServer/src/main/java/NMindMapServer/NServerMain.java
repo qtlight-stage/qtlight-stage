@@ -36,7 +36,9 @@ public class NServerMain {
             JsonObject result = dataManager.processCommand(json);
             if (result != null) {
                 for (AsynchronousSocketChannel ch : list) {
-                    NServerConnectionManager.sendJson(ch, result);
+                    if (ch.isOpen()) {
+                        NServerConnectionManager.sendJson(ch, result);
+                    }
                 }
             }
         });
