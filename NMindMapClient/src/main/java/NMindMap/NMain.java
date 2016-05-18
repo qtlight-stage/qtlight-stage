@@ -27,20 +27,6 @@ public class NMain {
         mainFrame.setVisible(true);
 
         NConnectionManager.sendJson(Json.createReader(new StringReader("{\"type\": \"refresh\"}")).readObject());
-        // 아래부분에 네트워크 통신 부분 필요
-        /*long start = System.currentTimeMillis();
-        long end = System.currentTimeMillis();
-		int x = 100;
-		while (true) {
-			end = System.currentTimeMillis();
-			if (end - start > 5000) {
-				C.commandAddNode(mainFrame, "test", x, x, 120, 25);
-				System.out.println("hello");
-				start = end;
-				x = x + 20;
-			}
-
-		}*/
     }
 
 }

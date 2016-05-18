@@ -45,10 +45,8 @@ public class NFrame extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
-        JMenu mnMenu = new JMenu("Menu");
+        JMenu mnMenu = new JMenu("Client");
         menuBar.add(mnMenu);
-        JMenuItem menuItemClose = new JMenuItem("Close");
-        mnMenu.add(menuItemClose);
         getContentPane().setLayout(null);
 
         this.addMenuButton("Create Node", 0, 0);
