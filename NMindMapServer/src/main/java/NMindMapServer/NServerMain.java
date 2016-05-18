@@ -1,6 +1,6 @@
 package NMindMapServer;
 
-import net.maritimecloud.internal.core.javax.json.JsonObject;
+import javax.json.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
