@@ -19,10 +19,10 @@ public class NConnectionManager {
     private static AsynchronousSocketChannel ch;
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
-    public static void connectToServer(Consumer<JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
+    public static void connectToServer(InetSocketAddress address, Consumer<JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
         ch = AsynchronousSocketChannel.open();
 
-        Future<Void> future = ch.connect(new InetSocketAddress("localhost", 8080));
+        Future<Void> future = ch.connect(address);
         future.get();
 
         System.out.print("Connected to server\n");

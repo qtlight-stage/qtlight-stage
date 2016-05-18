@@ -4,6 +4,7 @@ import javax.json.Json;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutionException;
 
 public class NMain {
@@ -14,7 +15,7 @@ public class NMain {
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
         NCommandReceiver receiver = new NCommandReceiver();
 
-        NConnectionManager.connectToServer(data -> {
+        NConnectionManager.connectToServer(new InetSocketAddress("localhost", 8080), data -> {
             System.out.print(data.toString());
             receiver.processCommand(mainFrame, data);
         });
