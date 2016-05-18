@@ -45,6 +45,7 @@ public class NServerConnectionManager {
         pool.submit(() -> {
             final ByteBuffer buffer = ByteBuffer.allocate(1024);
             final StringBuilder stringBuilder = new StringBuilder();
+            // TODO: Enable appending UTF-8 partial bytes
 
             while (ch.isOpen()) {
                 try {
