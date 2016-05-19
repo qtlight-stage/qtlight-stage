@@ -1,9 +1,7 @@
 package NMindMap;
 
-import javax.json.Json;
 import javax.swing.*;
 import java.io.IOException;
-import java.io.StringReader;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutionException;
 
