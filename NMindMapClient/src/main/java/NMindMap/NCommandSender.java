@@ -4,6 +4,13 @@ import javax.json.Json;
 import javax.json.JsonObject;
 
 class NCommandSender {
+    void commandRefresh() {
+        JsonObject command = Json.createObjectBuilder()
+                .add("type", "refresh")
+                .build();
+        NConnectionManager.sendJson(command);
+    }
+
     void commandAddNode(String content, int x, int y, int width, int height) {
         JsonObject command = this.generateNewVertexCommand(content, x, y, width, height);
         NConnectionManager.sendJson(command);
