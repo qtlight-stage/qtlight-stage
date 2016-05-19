@@ -36,7 +36,12 @@ public class NServerMain {
             System.out.print(json.toString());
             JsonObject result = dataManager.processCommand(json);
             if (result != null) {
-                list.stream().filter(Channel::isOpen).forEach(ch -> NServerConnectionManager.sendJson(ch, result));
+                if (result.getString("type").equals("refresh")) {
+                    NServerConnectionManager.sendJson(channel, result);
+                }
+                else {
+                    list.stream().filter(Channel::isOpen).forEach(ch -> NServerConnectionManager.sendJson(ch, result));
+                }
             }
         });
 
