@@ -115,7 +115,7 @@ class NFrame extends JFrame {
         setEnables(enable, createNodeButton, removeNodeButton, createArrowButton, removeArrowButton, editNodeButton, moveNodeButton);
     }
 
-    Node findNode(int nodeId) {
+    private Node findNode(int nodeId) {
         for (Node node : nodeList) {
             if (node.getId() == nodeId) {
                 return node;
@@ -137,7 +137,7 @@ class NFrame extends JFrame {
         newNode.updateUI();
     }
 
-    void addNodeFromVertex(NVertex vertex) {
+    private void addNodeFromVertex(NVertex vertex) {
         Node newNode = new Node(vertex.id());
         newNode.setText(vertex.content());
         newNode.setBounds(vertex.x(), vertex.y(), vertex.width(), vertex.height());
@@ -216,12 +216,12 @@ class NFrame extends JFrame {
         drawMindMap();
     }
 
-    void clearMindMap() {
+    private void clearMindMap() {
         Graphics g = this.getLayeredPane().getGraphics();
         g.clearRect(menuWidth + marginWidth, marginHeight, Fwidth, Fheight);
     }
 
-    void drawMindMap() {
+    private void drawMindMap() {
         clearMindMap();
         Graphics g = this.getLayeredPane().getGraphics();
         List<NEdge> edgeList = this.mindMapData.edgeList;
@@ -238,7 +238,7 @@ class NFrame extends JFrame {
             if (eventnum == EOption)
                 return;
             JButton b = (JButton) e.getSource();
-            if (b == setIpButton && !setIpText.equals("")) {
+            if (b == setIpButton && !setIpText.getText().equals("")) {
                 onSetIp.accept(setIpText.getText());
                 setControlButtonsEnable(true);
             } else if (b.getText().equals("Create Node")) {
