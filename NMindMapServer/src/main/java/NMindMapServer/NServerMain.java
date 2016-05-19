@@ -4,6 +4,7 @@ import javax.json.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.Channel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,11 +36,7 @@ public class NServerMain {
             System.out.print(json.toString());
             JsonObject result = dataManager.processCommand(json);
             if (result != null) {
-                for (AsynchronousSocketChannel ch : list) {
-                    if (ch.isOpen()) {
-                        NServerConnectionManager.sendJson(ch, result);
-                    }
-                }
+                list.stream().filter(Channel::isOpen).forEach(ch -> NServerConnectionManager.sendJson(ch, result));
             }
         });
 
