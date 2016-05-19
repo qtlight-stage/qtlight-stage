@@ -5,8 +5,8 @@ import javax.json.JsonObject;
 /**
  * Created by sasch on 5/7/2016.
  */
-public class NCommandReceiver {
-    public void processCommand(NFrame f, JsonObject command) {
+class NCommandReceiver {
+    void processCommand(NFrame f, JsonObject command) {
         if (!command.containsKey("type")) {
             return;
         }

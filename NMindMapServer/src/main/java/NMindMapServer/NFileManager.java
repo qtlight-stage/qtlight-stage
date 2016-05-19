@@ -8,8 +8,8 @@ import java.io.*;
 /**
  * Created by sasch on 5/13/2016.
  */
-public class NFileManager {
-    public static JsonObject loadJson(File file) throws IOException {
+class NFileManager {
+    static JsonObject loadJson(File file) throws IOException {
         FileReader fileReader = new FileReader(file);
         char[] buffer = new char[(int)file.length()];
         fileReader.read(buffer);
@@ -19,7 +19,7 @@ public class NFileManager {
         return json;
     }
 
-    public static void saveJson(JsonObject json, String path) throws IOException {
+    static void saveJson(JsonObject json, String path) throws IOException {
         String str = json.toString();
 
         FileWriter writer = new FileWriter(path);

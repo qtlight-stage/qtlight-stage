@@ -8,10 +8,10 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutionException;
 
 public class NMain {
-    static int frameWidth = 1000;
-    static int frameHeight = 500;
-
     public static void main(String[] args) throws InterruptedException, ExecutionException, IOException {
+        int frameWidth = 1000;
+        int frameHeight = 500;
+
         NCommandReceiver receiver = new NCommandReceiver();
         NCommandSender sender = new NCommandSender();
         NFrame mainFrame = new NFrame(frameWidth, frameHeight);
@@ -23,11 +23,7 @@ public class NMain {
                     receiver.processCommand(mainFrame, data);
                 });
                 NConnectionManager.sendJson(Json.createReader(new StringReader("{\"type\": \"refresh\"}")).readObject());
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (IOException | ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         });

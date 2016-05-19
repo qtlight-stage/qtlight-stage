@@ -16,11 +16,11 @@ import java.util.function.Consumer;
 /**
  * Created by sasch on 5/6/2016.
  */
-public class NConnectionManager {
+class NConnectionManager {
     private static AsynchronousSocketChannel ch = null;
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
-    public static void connectToServer(InetSocketAddress address, Consumer<JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
+    static void connectToServer(InetSocketAddress address, Consumer<JsonObject> onMessage) throws IOException, ExecutionException, InterruptedException {
         if (ch != null) {
             ch.close();
         }
@@ -49,12 +49,9 @@ public class NConnectionManager {
                 else {
                     e.printStackTrace();
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
-            return;
         });
     }
 
@@ -86,7 +83,7 @@ public class NConnectionManager {
         }
     }
 
-    public static Future<Integer> sendJson(JsonObject json) {
+    static Future<Integer> sendJson(JsonObject json) {
         return ch.write(StandardCharsets.UTF_8.encode(json.toString() + "\n"));
     }
 

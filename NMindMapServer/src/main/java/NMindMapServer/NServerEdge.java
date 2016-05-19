@@ -3,7 +3,7 @@ package NMindMapServer;
 import javax.json.Json;
 import javax.json.JsonObject;
 
-public class NServerEdge {
+class NServerEdge {
 	private int NstartId;
 	private int NendId;
 	private int NstartX;
@@ -15,7 +15,7 @@ public class NServerEdge {
 	private int NendWidth;
 	private int NendHeight;
 
-	public NServerEdge(NServerVertex start, NServerVertex end){
+	NServerEdge(NServerVertex start, NServerVertex end){
 		this.NstartId = start.id();
 		this.NstartX = start.x();
 		this.NstartY = start.y();
@@ -29,7 +29,7 @@ public class NServerEdge {
 		this.NendHeight = end.height();
 	}
 
-	public void modifyStart (NServerVertex start){
+	void modifyStart (NServerVertex start){
 		this.NstartId = start.id();
 		this.NstartX = start.x();
 		this.NstartY = start.y();
@@ -37,7 +37,7 @@ public class NServerEdge {
 		this.NstartHeight = start.height();
 	}
 
-	public void modifyEnd (NServerVertex end){
+	void modifyEnd (NServerVertex end){
 		this.NendId = end.id();
 		this.NendX = end.x();
 		this.NendY = end.y();
@@ -45,15 +45,15 @@ public class NServerEdge {
 		this.NendHeight = end.height();
 	}
 
-	public int getStartId(){ return this.NstartId;}
-	public int getEndId(){return this.NendId;}
+	int getStartId(){ return this.NstartId;}
+	int getEndId(){return this.NendId;}
 
-	public int getStartX(){return this.NstartX + (this.NstartWidth / 2);}
-	public int getStartY(){return this.NstartY + (this.NstartHeight / 2);}
-	public int getEndX(){return this.NendX + (this.NendWidth / 2);}
-	public int getEndY(){return this.NendY + (this.NendHeight / 2);}
+	int getStartX(){return this.NstartX + (this.NstartWidth / 2);}
+	int getStartY(){return this.NstartY + (this.NstartHeight / 2);}
+	int getEndX(){return this.NendX + (this.NendWidth / 2);}
+	int getEndY(){return this.NendY + (this.NendHeight / 2);}
 
-	public JsonObject toJson() {
+	JsonObject toJson() {
 		return Json.createObjectBuilder()
 				.add("start_vertex", this.NstartId)
 				.add("end_vertex", this.NendId)

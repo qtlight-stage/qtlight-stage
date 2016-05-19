@@ -4,11 +4,11 @@ import javax.json.*;
 import java.util.List;
 import java.util.LinkedList;
 
-public class NServerData {
-    public final List<NServerVertex> vertexList = new LinkedList<>();
-    public final List<NServerEdge> edgeList = new LinkedList<>();
+class NServerData {
+    final List<NServerVertex> vertexList = new LinkedList<>();
+    final List<NServerEdge> edgeList = new LinkedList<>();
 
-    public NServerVertex getVertex(int vid) {
+    NServerVertex getVertex(int vid) {
         for (NServerVertex vertex : vertexList) {
             if (vertex.id() == vid)
                 return vertex;
@@ -16,13 +16,13 @@ public class NServerData {
         return null;
     }
 
-    public NServerVertex createVertex(int id, String contents, int x, int y, int width, int height) {
+    NServerVertex createVertex(int id, String contents, int x, int y, int width, int height) {
         NServerVertex new_vertex = new NServerVertex(id, contents, x, y, width, height);
         this.vertexList.add(new_vertex);
         return new_vertex;
     }
 
-    public NServerEdge createEdge(int start, int end) {
+    NServerEdge createEdge(int start, int end) {
         removeEdge(start, end);
         NServerVertex Vstart = this.getVertex(start);
         NServerVertex Vend = this.getVertex(end);
@@ -33,7 +33,7 @@ public class NServerData {
         return new_connection;
     }
 
-    public void removeEdge(int start, int end) {
+    void removeEdge(int start, int end) {
         NServerVertex Vstart = this.getVertex(start);
         NServerVertex Vend = this.getVertex(end);
         Vstart.removeConnection(end);
@@ -54,7 +54,7 @@ public class NServerData {
         }
     }
 
-    public void removeVertex(int vid) {
+    void removeVertex(int vid) {
         NServerVertex V = this.getVertex(vid);
         List<Integer> connected_vertex = V.getConnection();
         while (connected_vertex.size() > 0) {
@@ -64,7 +64,7 @@ public class NServerData {
         vertexList.remove(V);
     }
 
-    public int getHighestId() {
+    int getHighestId() {
         int max = 0;
         for (NServerVertex vertex : this.vertexList) {
             int id = vertex.id();
@@ -75,7 +75,7 @@ public class NServerData {
         return max;
     }
 
-    public static NServerData fromJson(JsonObject json) {
+    static NServerData fromJson(JsonObject json) {
         NServerData data = new NServerData();
         JsonArray vertices = json.getJsonArray("vertices");
         JsonArray edges = json.getJsonArray("edges");
@@ -108,7 +108,7 @@ public class NServerData {
         );
     }
 
-    public JsonObject toJson() {
+    JsonObject toJson() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
         JsonArrayBuilder vertices = Json.createArrayBuilder();

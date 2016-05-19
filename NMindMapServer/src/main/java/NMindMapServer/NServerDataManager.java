@@ -9,16 +9,16 @@ import java.util.Map;
 /**
  * Created by sasch on 5/7/2016.
  */
-public class NServerDataManager {
+class NServerDataManager {
     private NServerData data;
     private int lastId = -1;
 
-    public NServerDataManager(NServerData data) {
+    NServerDataManager(NServerData data) {
         this.data = data;
         lastId = this.data.getHighestId();
     }
 
-    public JsonObject processCommand(JsonObject command) {
+    JsonObject processCommand(JsonObject command) {
         if (!command.containsKey("type")) {
             return generateError("Required 'type' field is not found.", command);
         }

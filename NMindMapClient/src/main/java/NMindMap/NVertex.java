@@ -2,7 +2,7 @@ package NMindMap;
 import java.util.List;
 import java.util.LinkedList;
 
-public class NVertex {
+class NVertex {
 	private int Vid;
 	private String Vcontent;
 	private int Vx;
@@ -11,7 +11,7 @@ public class NVertex {
 	private int Vheight;
 	private List<Integer> ConnectedVertex = new LinkedList<>(); //store connected vertex id
 
-	public NVertex(int id, String content, int x, int y, int width, int height) {
+	NVertex(int id, String content, int x, int y, int width, int height) {
 		this.Vid = id;
 		this.Vcontent = content;
 		this.Vx = x;
@@ -20,11 +20,11 @@ public class NVertex {
 		this.Vheight = height;
 	}
 
-	public void makeConnection(int vid) {
+	void makeConnection(int vid) {
 		this.ConnectedVertex.add(vid);
 	}
 
-	public void removeConnection(int vid) {
+	void removeConnection(int vid) {
 		int i = 0;
 		while (i < ConnectedVertex.size()){
 			if(ConnectedVertex.get(i) == vid){
@@ -35,28 +35,28 @@ public class NVertex {
 		}
 	}
 
-	public List<Integer> getConnection() {
+	List<Integer> getConnection() {
 		return this.ConnectedVertex;
 	}
 
-	public void modifyContent(String new_c){
+	void modifyContent(String new_c){
 		this.Vcontent = new_c;
 	}
 
-	public void modifyCoordinate(int new_x, int new_y){
+	void modifyCoordinate(int new_x, int new_y){
 		this.Vx = new_x;
 		this.Vy = new_y;
 	}
 
-	public void modifySize(int new_w, int new_h){
+	void modifySize(int new_w, int new_h){
 		this.Vwidth = new_w;
 		this.Vheight = new_h;
 	}
 
-	public int id() {return this.Vid;}
-	public String content() {return this.Vcontent;}
-	public int x() {return this.Vx;}
-	public int y() {return this.Vy;}
-	public int width() {return this.Vwidth;}
-	public int height() {return this.Vheight;}
+	int id() {return this.Vid;}
+	String content() {return this.Vcontent;}
+	int x() {return this.Vx;}
+	int y() {return this.Vy;}
+	int width() {return this.Vwidth;}
+	int height() {return this.Vheight;}
 }

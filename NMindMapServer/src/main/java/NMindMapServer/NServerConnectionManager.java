@@ -19,10 +19,10 @@ import java.util.function.BiConsumer;
 /**
  * Created by sasch on 5/7/2016.
  */
-public class NServerConnectionManager {
+class NServerConnectionManager {
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
-    public static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException {
+    static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException {
         final AsynchronousServerSocketChannel listener =
                 AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
@@ -91,7 +91,7 @@ public class NServerConnectionManager {
         return reader.readObject();
     }
 
-    public static Future<Integer> sendJson(AsynchronousSocketChannel ch, JsonObject json) {
+    static Future<Integer> sendJson(AsynchronousSocketChannel ch, JsonObject json) {
         return ch.write(StandardCharsets.UTF_8.encode(json.toString() + "\n"));
     }
 }

@@ -4,11 +4,11 @@ import javax.json.*;
 import java.util.List;
 import java.util.LinkedList;
 
-public class NData {
-    public final List<NVertex> vertexList = new LinkedList<>();
-    public final List<NEdge> edgeList = new LinkedList<>();
+class NData {
+    final List<NVertex> vertexList = new LinkedList<>();
+    final List<NEdge> edgeList = new LinkedList<>();
 
-    public NVertex getVertex(int vid) {
+    NVertex getVertex(int vid) {
         for (NVertex vertex : vertexList) {
             if (vertex.id() == vid)
                 return vertex;
@@ -16,12 +16,12 @@ public class NData {
         return null;
     }
 
-    public void createVertex(int id, String contents, int x, int y, int width, int height) {
+    void createVertex(int id, String contents, int x, int y, int width, int height) {
         NVertex new_vertex = new NVertex(id, contents, x, y, width, height);
         this.vertexList.add(new_vertex);
     }
 
-    public void createEdge(int start, int end) {
+    void createEdge(int start, int end) {
         removeEdge(start, end);
         NVertex Vstart = this.getVertex(start);
         NVertex Vend = this.getVertex(end);
@@ -31,7 +31,7 @@ public class NData {
         this.edgeList.add(new_connection);
     }
 
-    public void removeEdge(int start, int end) {
+    void removeEdge(int start, int end) {
         NVertex Vstart = this.getVertex(start);
         NVertex Vend = this.getVertex(end);
         Vstart.removeConnection(end);
@@ -52,7 +52,7 @@ public class NData {
         }
     }
 
-    public void removeVertex(int vid) {
+    void removeVertex(int vid) {
         NVertex V = this.getVertex(vid);
         List<Integer> connected_vertex = V.getConnection();
         while (connected_vertex.size() > 0) {
@@ -62,7 +62,7 @@ public class NData {
         vertexList.remove(V);
     }
 
-    public static NData fromJson(JsonObject json) {
+    static NData fromJson(JsonObject json) {
         NData data = new NData();
         JsonArray vertices = json.getJsonArray("vertices");
         JsonArray edges = json.getJsonArray("edges");

@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
-public class NFrame extends JFrame {
-    public int eventnum = 0;
+class NFrame extends JFrame {
+    int eventnum = 0;
     private int EDefault = 0;
     private int EOption = -1;
     private int ECreateNode = 1;
@@ -49,7 +49,7 @@ public class NFrame extends JFrame {
 
     private MindMapPanel panel = new MindMapPanel();;
 
-    public NFrame(int width, int height) {
+    NFrame(int width, int height) {
         setTitle("NMindMap");
         Fwidth = width;
         Fheight = height;
@@ -73,11 +73,11 @@ public class NFrame extends JFrame {
         panel.add(moveNodeButton);
     }
 
-    public void listenSetIp(Consumer<String> onSetIp) {
+    void listenSetIp(Consumer<String> onSetIp) {
         this.onSetIp = onSetIp;
     }
 
-    public void setData(NData newData) {
+    void setData(NData newData) {
         this.mindMapData = newData;
         for (Node node : this.nodeList) {
             panel.remove(node);
@@ -87,7 +87,7 @@ public class NFrame extends JFrame {
         drawMindMap();
     }
 
-    public void setMain(NCommandSender M) {
+    void setMain(NCommandSender M) {
         command = M;
     }
 
@@ -115,7 +115,7 @@ public class NFrame extends JFrame {
         setEnables(enable, createNodeButton, removeNodeButton, createArrowButton, removeArrowButton, editNodeButton, moveNodeButton);
     }
 
-    public Node findNode(int nodeId) {
+    Node findNode(int nodeId) {
         for (Node node : nodeList) {
             if (node.getId() == nodeId) {
                 return node;
@@ -124,7 +124,7 @@ public class NFrame extends JFrame {
         return null;
     }
 
-    public void addNode(int nodeId, String content, int x, int y, int width, int height) {
+    void addNode(int nodeId, String content, int x, int y, int width, int height) {
         this.mindMapData.createVertex(nodeId, content, x, y, width, height);
         Node newNode = new Node(nodeId);
         newNode.setText(content);
@@ -137,7 +137,7 @@ public class NFrame extends JFrame {
         newNode.updateUI();
     }
 
-    public void addNodeFromVertex(NVertex vertex) {
+    void addNodeFromVertex(NVertex vertex) {
         Node newNode = new Node(vertex.id());
         newNode.setText(vertex.content());
         newNode.setBounds(vertex.x(), vertex.y(), vertex.width(), vertex.height());
@@ -149,7 +149,7 @@ public class NFrame extends JFrame {
         newNode.updateUI();
     }
 
-    public void removeNode(int nodeId) {
+    void removeNode(int nodeId) {
         this.mindMapData.removeVertex(nodeId);
         int i = 0;
         Node node = null;
@@ -168,17 +168,17 @@ public class NFrame extends JFrame {
         }
     }
 
-    public void addArrow(int startId, int endId) {
+    void addArrow(int startId, int endId) {
         this.mindMapData.createEdge(startId, endId);
         drawMindMap();
     }
 
-    public void removeArrow(int startId, int endId) {
+    void removeArrow(int startId, int endId) {
         this.mindMapData.removeEdge(startId, endId);
         drawMindMap();
     }
 
-    public void editNode(int nodeId, String contents, int width, int height) {
+    void editNode(int nodeId, String contents, int width, int height) {
         Node n = this.findNode(nodeId);
         this.getContentPane().remove(n);
         NVertex v = this.mindMapData.getVertex(nodeId);
@@ -198,7 +198,7 @@ public class NFrame extends JFrame {
         drawMindMap();
     }
 
-    public void moveNode(int nodeId, int x, int y) {
+    void moveNode(int nodeId, int x, int y) {
         Node n = this.findNode(nodeId);
         this.getContentPane().remove(n);
         NVertex v = this.mindMapData.getVertex(nodeId);
@@ -216,12 +216,12 @@ public class NFrame extends JFrame {
         drawMindMap();
     }
 
-    public void clearMindMap() {
+    void clearMindMap() {
         Graphics g = this.getLayeredPane().getGraphics();
         g.clearRect(menuWidth + marginWidth, marginHeight, Fwidth, Fheight);
     }
 
-    public void drawMindMap() {
+    void drawMindMap() {
         clearMindMap();
         Graphics g = this.getLayeredPane().getGraphics();
         List<NEdge> edgeList = this.mindMapData.edgeList;
@@ -301,11 +301,11 @@ public class NFrame extends JFrame {
         }
     }
 
-    class MindMapPanel extends JPanel {
+    private class MindMapPanel extends JPanel {
         Point startP = null;
         Point endP = null;
 
-        public MindMapPanel() {
+        MindMapPanel() {
             this.addMouseListener(new MyMouseListener());
         }
 
@@ -331,7 +331,7 @@ public class NFrame extends JFrame {
         }
     }
 
-    class Node extends JButton {
+    private class Node extends JButton {
         private int id;
 
         Node(int _id) {
@@ -343,7 +343,7 @@ public class NFrame extends JFrame {
         }
     }
 
-    class CreateNodeOptionFrame extends JFrame {
+    private class CreateNodeOptionFrame extends JFrame {
         private Point P;
         private NFrame PF;
         private int marginWidth = 10;
@@ -354,7 +354,7 @@ public class NFrame extends JFrame {
         private JTextPane Owidth;
         private JTextPane Oheight;
 
-        public CreateNodeOptionFrame(NFrame Parent, Point _P) {
+        CreateNodeOptionFrame(NFrame Parent, Point _P) {
             super("Node Option");
             P = _P;
             PF = Parent;
@@ -430,7 +430,7 @@ public class NFrame extends JFrame {
         }
     }
 
-    class EditNodeOptionFrame extends JFrame {
+    private class EditNodeOptionFrame extends JFrame {
         private NFrame PF;
         private Node N;
         private int marginWidth = 10;
@@ -441,7 +441,7 @@ public class NFrame extends JFrame {
         private JTextPane Owidth;
         private JTextPane Oheight;
 
-        public EditNodeOptionFrame(NFrame Parent, Node n) {
+        EditNodeOptionFrame(NFrame Parent, Node n) {
             super("Node Option");
             PF = Parent;
             N = n;
