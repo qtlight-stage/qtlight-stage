@@ -12,7 +12,7 @@ class NServerVertex {
     private int y;
     private int width;
     private int height;
-    private List<Integer> ConnectedVertex = new LinkedList<>(); //store connected vertex id
+    private List<Integer> connectedVertices = new LinkedList<>(); //store connected vertex id
 
     NServerVertex(int id, String content, int x, int y, int width, int height) {
         this.id = id;
@@ -24,14 +24,14 @@ class NServerVertex {
     }
 
     void makeConnection(int vid) {
-        this.ConnectedVertex.add(vid);
+        this.connectedVertices.add(vid);
     }
 
     void removeConnection(int vid) {
         int i = 0;
-        while (i < ConnectedVertex.size()) {
-            if (ConnectedVertex.get(i) == vid) {
-                ConnectedVertex.remove(i);
+        while (i < connectedVertices.size()) {
+            if (connectedVertices.get(i) == vid) {
+                connectedVertices.remove(i);
                 return;
             }
             i++;
@@ -39,7 +39,7 @@ class NServerVertex {
     }
 
     List<Integer> getConnection() {
-        return this.ConnectedVertex;
+        return this.connectedVertices;
     }
 
     void modifyContent(String new_c) {
