@@ -3,6 +3,7 @@ package NMindMapServer;
 import javax.json.JsonObject;
 import java.io.File;
 import java.io.IOException;
+import java.nio.channels.AsynchronousChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.Channel;
 import java.util.LinkedList;
@@ -29,10 +30,7 @@ public class NServerMain {
         NServerDataManager dataManager = new NServerDataManager(data);
 
         List<AsynchronousSocketChannel> list = new LinkedList<>();
-        NServerConnectionManager.acceptConnection((AsynchronousSocketChannel channel, JsonObject json) -> {
-            if (!list.contains(channel)) {
-                list.add(channel);
-            }
+        NServerConnectionManager.acceptConnection(list::add, (channel, json) -> {
             System.out.print(json.toString());
             JsonObject result = dataManager.processCommand(json);
             if (result != null) {
@@ -40,10 +38,12 @@ public class NServerMain {
                     NServerConnectionManager.sendJson(channel, result);
                 }
                 else {
-                    list.stream().filter(Channel::isOpen).forEach(ch -> NServerConnectionManager.sendJson(ch, result));
+                    for (AsynchronousSocketChannel ch : list) {
+                        NServerConnectionManager.sendJson(ch, result);
+                    }
                 }
             }
-        });
+        }, list::remove);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override

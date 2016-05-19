@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * Created by sasch on 5/7/2016.
@@ -22,7 +23,7 @@ import java.util.function.BiConsumer;
 class NServerConnectionManager {
     private static final ExecutorService pool = Executors.newFixedThreadPool(10);
 
-    static void acceptConnection(BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) throws IOException, ExecutionException {
+    static void acceptConnection(Consumer<AsynchronousSocketChannel> onConnect, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage, Consumer<AsynchronousSocketChannel> onDisconnect) throws IOException, ExecutionException {
         final AsynchronousServerSocketChannel listener =
                 AsynchronousServerSocketChannel.open().bind(new InetSocketAddress(8080));
 
@@ -35,27 +36,39 @@ class NServerConnectionManager {
                 future = listener.accept();
                 AsynchronousSocketChannel ch = future.get();
                 System.out.print("Connected\n");
+                onConnect.accept(ch);
 
                 // handle this connection
-                handleChannel(ch, onMessage);
+                handleChannel(ch, onMessage, onDisconnect);
             }
         });
     }
 
-    private static void handleChannel(final AsynchronousSocketChannel ch, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage) {
+    private static void handleChannel(final AsynchronousSocketChannel ch, BiConsumer<AsynchronousSocketChannel, JsonObject> onMessage, Consumer<AsynchronousSocketChannel> onDisconnect) {
         pool.submit(() -> {
             final ByteBuffer buffer = ByteBuffer.allocate(1024);
             final StringBuilder stringBuilder = new StringBuilder();
             // TODO: Enable appending UTF-8 partial bytes
 
-            while (ch.isOpen()) {
-                try {
+            try {
+                while (ch.isOpen()) {
                     read(ch, buffer, stringBuilder, onMessage);
-                } catch (ExecutionException ex) {
-                    break;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+            } catch (ExecutionException ex) {
+                if (ex.getCause() instanceof IOException) {
+                    System.out.print("IO failed");
+                } else {
+                    ex.printStackTrace();
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+            onDisconnect.accept(ch);
+            try {
+                ch.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }
