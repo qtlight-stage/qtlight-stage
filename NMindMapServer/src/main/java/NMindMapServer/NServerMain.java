@@ -29,8 +29,8 @@ public class NServerMain {
         }
         NServerDataManager dataManager = new NServerDataManager(data);
 
-        List<AsynchronousSocketChannel> list = new LinkedList<>();
-        NServerConnectionManager.acceptConnection(list::add, (channel, json) -> {
+        List<AsynchronousSocketChannel> channelList = new LinkedList<>();
+        NServerConnectionManager.acceptConnection(channelList::add, (channel, json) -> {
             System.out.print(json.toString());
             JsonObject result = dataManager.processCommand(json);
             if (result != null) {
@@ -38,12 +38,12 @@ public class NServerMain {
                     NServerConnectionManager.sendJson(channel, result);
                 }
                 else {
-                    for (AsynchronousSocketChannel ch : list) {
+                    for (AsynchronousSocketChannel ch : channelList) {
                         NServerConnectionManager.sendJson(ch, result);
                     }
                 }
             }
-        }, list::remove);
+        }, channelList::remove);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
