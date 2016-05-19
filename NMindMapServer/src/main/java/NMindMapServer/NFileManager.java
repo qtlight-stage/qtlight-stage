@@ -12,11 +12,11 @@ class NFileManager {
     static JsonObject loadJson(File file) throws IOException {
         FileReader fileReader = new FileReader(file);
         char[] buffer = new char[(int)file.length()];
+        //noinspection ResultOfMethodCallIgnored
         fileReader.read(buffer);
         fileReader.close();
         JsonReader jsonReader = Json.createReader(new StringReader(new String(buffer)));
-        JsonObject json = jsonReader.readObject();
-        return json;
+        return jsonReader.readObject();
     }
 
     static void saveJson(JsonObject json, String path) throws IOException {

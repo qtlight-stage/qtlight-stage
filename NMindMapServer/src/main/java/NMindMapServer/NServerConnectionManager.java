@@ -30,6 +30,7 @@ class NServerConnectionManager {
 
         pool.submit(() -> {
             Future<AsynchronousSocketChannel> future;
+            //noinspection InfiniteLoopStatement
             while (true) {
                 future = listener.accept();
                 AsynchronousSocketChannel ch = future.get();

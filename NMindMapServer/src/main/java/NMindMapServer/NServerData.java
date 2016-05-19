@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.LinkedList;
 
 class NServerData {
-    final List<NServerVertex> vertexList = new LinkedList<>();
-    final List<NServerEdge> edgeList = new LinkedList<>();
+    private final List<NServerVertex> vertexList = new LinkedList<>();
+    private final List<NServerEdge> edgeList = new LinkedList<>();
 
     NServerVertex getVertex(int vid) {
         for (NServerVertex vertex : vertexList) {
@@ -24,20 +24,20 @@ class NServerData {
 
     NServerEdge createEdge(int start, int end) {
         removeEdge(start, end);
-        NServerVertex Vstart = this.getVertex(start);
-        NServerVertex Vend = this.getVertex(end);
-        NServerEdge new_connection = new NServerEdge(Vstart, Vend);
-        Vstart.makeConnection(end);
-        Vend.makeConnection(start);
-        this.edgeList.add(new_connection);
-        return new_connection;
+        NServerVertex startVertex = this.getVertex(start);
+        NServerVertex endVertex = this.getVertex(end);
+        NServerEdge connection = new NServerEdge(startVertex, endVertex);
+        startVertex.makeConnection(end);
+        endVertex.makeConnection(start);
+        this.edgeList.add(connection);
+        return connection;
     }
 
     void removeEdge(int start, int end) {
-        NServerVertex Vstart = this.getVertex(start);
-        NServerVertex Vend = this.getVertex(end);
-        Vstart.removeConnection(end);
-        Vend.removeConnection(start);
+        NServerVertex startVertex = this.getVertex(start);
+        NServerVertex endVertex = this.getVertex(end);
+        startVertex.removeConnection(end);
+        endVertex.removeConnection(start);
         int i = 0;
         while (i < edgeList.size()) {
             NServerEdge edge = edgeList.get(i);
@@ -81,10 +81,10 @@ class NServerData {
         JsonArray edges = json.getJsonArray("edges");
 
         for (JsonValue vertexJsonValue : vertices) {
-            createVertexFromJson(data, (JsonObject)vertexJsonValue);
+            createVertexFromJson(data, (JsonObject) vertexJsonValue);
         }
         for (JsonValue edgeJsonValue : edges) {
-            createEdgeFromJson(data, (JsonObject)edgeJsonValue);
+            createEdgeFromJson(data, (JsonObject) edgeJsonValue);
         }
 
         return data;
