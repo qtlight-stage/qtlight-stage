@@ -20,7 +20,12 @@ public class NMain {
                 System.out.print("Connecting to " + str);
                 NConnectionManager.connectToServer(new InetSocketAddress(str, 8080), data -> {
                     System.out.print(data.toString());
-                    receiver.processCommand(mainFrame, data);
+                    if (data.getString("type").equals("error")) {
+                        receiver.processCommand(mainFrame, data);
+                    }
+                    else {
+                        NConnectionManager.sendJson(Json.createReader(new StringReader("{\"type\": \"refresh\"}")).readObject());
+                    }
                 });
                 NConnectionManager.sendJson(Json.createReader(new StringReader("{\"type\": \"refresh\"}")).readObject());
             } catch (IOException | ExecutionException | InterruptedException e) {
