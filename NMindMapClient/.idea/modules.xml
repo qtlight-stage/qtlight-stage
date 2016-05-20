@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/LightStage/LightStage.iml" filepath="$PROJECT_DIR$/LightStage/LightStage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LightStage/NMindMapClient.iml" filepath="$PROJECT_DIR$/LightStage/NMindMapClient.iml" />
     </modules>
   </component>
 </project>
